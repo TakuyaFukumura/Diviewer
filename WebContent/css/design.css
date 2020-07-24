@@ -1,0 +1,103 @@
+@charset "UTF-8";
+
+.example{
+
+}
+
+/****************/
+.wrapper {
+	width: 1000px;
+	margin: 0 auto;
+	text-align: left;
+	/*background: #ccccdd;*/
+}
+.txt {
+	display: inline-block;
+	text-align: left;
+  }
+.index_wrapper {
+	width: 560px;
+	margin: 0 auto;
+	text-align: left;
+	/*background: #ccccdd;*/
+}
+.new_wrapper {
+	width: 365px;
+	margin: 0 auto;
+	text-align: left;
+	/*background: #ccccdd;*/
+}
+.cam_new_wrapper{
+	width: 380px;
+	margin: 0 auto;
+	text-align: left;
+}
+/*-------------------リストボタン---------------------*/
+.button {
+  display       : inline-block;
+  font-size     : 15px;        /* 文字サイズ */
+  text-align    : center;      /* 文字位置   */
+  cursor        : pointer;     /* カーソル   */
+  padding       : 7px 7px;   /* 余白       */
+  background    : rgba( 0, 109, 217, 0.0 );     /* 背景色     */
+  color         : #0066CC;     /* 文字色     */
+  line-height   : 1em;         /* 1行の高さ  */
+  border        : none;    /* 枠の指定 */
+  text-decoration: underline;
+}
+.button:hover {
+  box-shadow    : none;        /* カーソル時の影消去 */
+  color         : #000066;     /* 背景色     */
+  background    : rgba( 0, 0, 0, 0 );     /* 文字色     */
+  text-decoration: none;
+}
+/*----------リストテーブル--------------------*/
+.table_design table{
+
+  border-collapse:collapse;
+  margin:0 auto;
+}
+.table_design td,th{
+  padding:7px 10px;
+}
+.table_design th{
+  color:#fff;
+  background: #03A9F4;
+  border-bottom: solid 1px #759786;
+}
+.table_design table tr:nth-child(odd){
+  background: #E7EBE9;
+}
+.table_design table tr:nth-child(even) {
+  background: #F8F8F8;
+}
+.table_design td{
+  border-bottom: solid 1px #A7D2BE;
+}
+/*----------------show.jsp---------------------*/
+.show_cam{
+	text-align    : center;
+	/*background: #E7EBE9;*/
+}
+/*----------------body-------------------------*/
+body{
+	font-family: "Roboto", sans-serif;
+}
+/*---------------------------*/
+.submit_btn{
+  display: inline-block;
+  padding: 0.3em 1em;
+  text-decoration: none;
+  color: #black;
+  border: solid 2px #03A9F4;
+  border-radius: 3px;
+  transition: .4s;
+}
+.submit_btn:hover {
+  background: #03A9F4;
+  color: white;
+}
+/*******************************/
+.not_test th{
+	margin:0 auto;
+}

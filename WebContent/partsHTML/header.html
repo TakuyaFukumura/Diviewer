@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="css\\header.css">
+<nav>
+	<ul>
+		<li><a href="top"><img src="image\logo.png" alt="ロゴ"
+				title="ロゴマーク"></a></li>
+		<li><a href="top">TOP</a></li>
+		<li><a href="new">銘柄登録</a></li>
+		<li>
+			<form action="search" method="POST">
+				<input type="text" name="ticker_symbol" value=""
+					placeholder="銘柄検索 (大文字)英字" pattern="^[A-Z]+$"> <input
+					type="submit" name="search" value="" class="btn-flat-dashed-border">
+				<!-- input type="submit" name="search" value="検索" class="btn-flat-dashed-border" -->
+			</form>
+		</li>
+		<li><a href="index" class="btn-square-little-rich">ログアウト</a></li>
+	</ul>
+</nav>
