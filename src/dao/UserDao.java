@@ -17,13 +17,13 @@ import dto.UserDto;
  */
 public class UserDao{
 	/** MYSQLドライバ名 */
-	String CLASSNAME_ORACLE_DRIVER = "oracle.jdbc.OracleDriver";
+	String CLASSNAME_ORACLE_DRIVER = "org.h2.Driver";
 	/** MYSQL接続用URL */
-	String URL_ORACLE = "jdbc:oracle:thin:@localhost:1521/xepdb1";
+	String URL_ORACLE = "jdbc:h2:tcp://localhost/~/example";
 	/** MYSQL接続用ユーザ名（root） */
-	String USERNAME_ORACLE = "scott";
+	String USERNAME_ORACLE = "blackchoco1114";
 	/** MYSQL接続用パスワード（root） */
-	String PASSWORD_ORACLE = "tiger";
+	String PASSWORD_ORACLE = "katuo045A";
 
 	protected Connection con;
 	protected PreparedStatement pstmt;
@@ -50,7 +50,7 @@ public class UserDao{
 		if (openConnection()) { //DB接続処理
 			try {
 				pstmt.setString(1, user_id); //SQLに情報加える
-				executeQueryAndField();//SQL実行から値取得までの処理
+				executeQueryAndField(); //SQL実行から値取得までの処理
 			} catch (SQLException e) {
 					printSQLException(e);
 			}finally{
@@ -118,7 +118,8 @@ public class UserDao{
 		boolean flag = false;
 		try {
 			Class.forName(CLASSNAME_ORACLE_DRIVER);
-			con = DriverManager.getConnection(URL_ORACLE, USERNAME_ORACLE, PASSWORD_ORACLE);
+			con = DriverManager.getConnection(URL_ORACLE, 
+					USERNAME_ORACLE, PASSWORD_ORACLE);
 			pstmt = con.prepareStatement(sql); //SQL使用部
 			con.setAutoCommit(false);
 			flag = true;

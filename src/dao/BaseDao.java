@@ -26,13 +26,13 @@ import dto.BaseDto;
  */
 public abstract class BaseDao{
 	/** MYSQLドライバ名 */
-	String CLASSNAME_ORACLE_DRIVER = "oracle.jdbc.OracleDriver";
+	String CLASSNAME_ORACLE_DRIVER = "org.h2.Driver";
 	/** MYSQL接続用URL */
-	String URL_ORACLE = "jdbc:oracle:thin:@localhost:1521/xepdb1";
+	String URL_ORACLE = "jdbc:h2:tcp://localhost/~/example";
 	/** MYSQL接続用ユーザ名（root） */
-	String USERNAME_ORACLE = "scott";
+	String USERNAME_ORACLE = "blackchoco1114";
 	/** MYSQL接続用パスワード（root） */
-	String PASSWORD_ORACLE = "tiger";
+	String PASSWORD_ORACLE = "katuo045A";
 
 
 	/**ユーザテーブル名 */

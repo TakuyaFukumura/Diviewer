@@ -18,7 +18,7 @@
 				<form action="top" method="POST" class="login-form">
 					<input type="text" name="loginUserId" value="fukumura"
 					 placeholder="User_ID" pattern="^[a-zA-Z0-9]+$" required />
-					<input type="password" name="loginPassword" value="1114"
+					<input type="password" name="loginPassword" value="takuya045A"
 					placeholder="password" pattern="^[a-zA-Z0-9]+$" required  />
 					<input type="submit" name="login" value="Login" class="login_button">
 				</form>
