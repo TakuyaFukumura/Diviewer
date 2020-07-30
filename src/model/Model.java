@@ -76,13 +76,12 @@ public class Model {
 	 */
 	public boolean loginCheck(String user_id, String user_pass) {
 		boolean flag = false;
-		//DAO使う //nullのときどうなる？
 		UserDto userDto = new UserDao().getUserById(user_id);
-		//データ比較、一致したらtrue
-		//if(userDto.getUser_pass().equals(user_pass))
-		if(userDto != null)
-			if(user_pass.equals(userDto.getUser_pass())) flag = true;
-
+		if(userDto != null) {
+			if(user_pass.equals(userDto.getUser_pass())) {
+				flag = true;
+			}
+		}
 		return flag;
 	}
 
@@ -94,8 +93,9 @@ public class Model {
 	 */
 	public String decideUrl(String user_id, String user_pass) {
 		String url = "index";
-		if(loginCheck(user_id, user_pass))
+		if(loginCheck(user_id, user_pass)) {
 			url = "top.jsp";
+		}
 		return url;
 	}
 
