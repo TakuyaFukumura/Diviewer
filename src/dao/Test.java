@@ -26,7 +26,7 @@ public class Test {
 //		System.out.println("---------------------------------");
 //		getUserById();
 //		System.out.println("---------------------------------");
-		findNewIncom();
+//		findNewIncom();
 //		System.out.println("---------------------------------");
 //		getPossessionBySymbolId();
 //		System.out.println("---------------------------------");
@@ -45,7 +45,21 @@ public class Test {
 //		sumList();
 //		getCartDataString();
 //		getUserById2();
+		getTickerAll();
 
+	}
+	/**
+	 * TICKER_TABLE全件取得
+	 * テスト結果：成功
+	 * 実施日付：2020/07/30 23:13
+	 */
+	public static void getTickerAll() {
+		List<TickerDto> tickerList = new TickerDao().getTickerAll();
+		for (TickerDto s: tickerList) {
+            System.out.print(s.getTicker_id());
+            System.out.print(",");
+            System.out.println(s.getTicker_symbol());
+        }
 	}
 
 	/**
