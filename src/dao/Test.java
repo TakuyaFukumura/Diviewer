@@ -45,7 +45,8 @@ public class Test {
 //		sumList();
 //		getCartDataString();
 //		getUserById2();
-		getTickerAll();
+//		getTickerAll();
+		new Model().outputTickerCSV();
 
 	}
 	/**
