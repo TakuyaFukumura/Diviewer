@@ -3,16 +3,9 @@
  */
 package model;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import dao.DividendIncomeDao;
 import dao.PossessionDao;
-import dao.TickerDao;
 import dao.UserDao;
-import dto.TickerDto;
 import dto.UserDto;
 
 /**
@@ -20,33 +13,6 @@ import dto.UserDto;
  * 様々な処理を含むクラス
  */
 public class Model {
-	/**
-	 * ticker_table情報をCSV出力する
-	 * @return 削除成功true 削除失敗false
-	 */
-	public void outputTickerCSV() {
-		List<TickerDto> tickerList = new ArrayList<>();
-		TickerDao td = new TickerDao();
-		tickerList = td.getTickerAll();
-		try {
-            FileWriter fw = new FileWriter("WebContent/csv/ticker_table.csv");
-            fw.write("ticker_id,ticker_symbol");
-            for (TickerDto tmp: tickerList) {
-            	String ticker_id = String.valueOf(tmp.getTicker_id());
-            	fw.write("\n");
-            	fw.write(ticker_id);
-            	fw.write(",");
-            	fw.write(tmp.getTicker_symbol());
-            }
-            fw.close();
-            System.out.print("TickerCSV正常出力");
-        } catch (IOException ex) {
-            System.out.print("TickerCSV出力失敗");
-            ex.printStackTrace();
-        }
-		return;
-	}
-
 	/**
 	 * ユーザーの保有する指定されたティッカー保有情報を削除する。
 	 * また、それに関連した配当情報も削除する

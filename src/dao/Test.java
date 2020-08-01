@@ -10,6 +10,7 @@ import dto.DividendIncomeDto;
 import dto.PossessionDto;
 import dto.TickerDto;
 import dto.UserDto;
+import model.CsvModel;
 import model.Model;
 
 /**
@@ -46,8 +47,29 @@ public class Test {
 //		getCartDataString();
 //		getUserById2();
 //		getTickerAll();
-		new Model().outputTickerCSV();
+//		System.out.println(new CsvModel().outputTickerCSV());
+//		getUserAll();
+		System.out.println(new CsvModel().outputUserCSV());
 
+	}
+	/**
+	 * USER_TABLE全件取得
+	 * テスト結果：成功
+	 * 実施日付：2020/08/01 22:50
+	 */
+	public static void getUserAll() {
+		List<UserDto> userList = new UserDao().getUserAll();
+		for (UserDto s: userList) {
+            System.out.print(s.getUser_id());
+            System.out.print(",");
+            System.out.print(s.getUser_pass());
+            System.out.print(",");
+            System.out.print(s.getNickname());
+            System.out.print(",");
+            System.out.print(s.getCreated_at());
+            System.out.print(",");
+            System.out.println(s.getUpdate_at());
+        }
 	}
 	/**
 	 * TICKER_TABLE全件取得

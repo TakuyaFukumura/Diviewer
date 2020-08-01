@@ -8,6 +8,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import dto.UserDto;
 
@@ -27,9 +29,9 @@ public class UserDao{
 
 	protected Connection con;
 	protected PreparedStatement pstmt;
-	private String sql = "select user_id,user_pass,nickname,created_at,update_at from "
-			+ "user_table where user_id = ? ";
-	private UserDto userDto = null;
+	private String sql = "";
+	private UserDto userDto = new UserDto();
+	private List<UserDto> userList = new ArrayList<>();
 
 	/**
 	 * sqlのセッター
@@ -40,6 +42,25 @@ public class UserDao{
 	public void setSql(String sql) {
 		this.sql = sql;
 	}
+	/**
+	 * user_table全件取得
+	 * @return 全ユーザ情報
+	 */
+	public List<UserDto> getUserAll() {
+		userList = new ArrayList<>();
+		sql = "SELECT user_id,user_pass,nickname,created_at,update_at "
+				+ "FROM user_table ";
+		if (openConnection()) { //DB接続処理
+			try {
+				executeQueryAndField(); //SQL実行から値取得までの処理
+			} catch (SQLException e) {
+					printSQLException(e);
+			}finally{
+				closeConnection(); //DB切断処理
+			}
+		}
+		return userList;
+	}
 
 	/**
 	 * ユーザIDからユーザ情報を取得する
@@ -47,6 +68,8 @@ public class UserDao{
 	 * @return UserDTOユーザ情報 失敗時null
 	 */
 	public UserDto getUserById(String user_id) {
+		sql = "select user_id,user_pass,nickname,created_at,update_at from "
+				+ "user_table where user_id = ? ";
 		if (openConnection()) { //DB接続処理
 			try {
 				pstmt.setString(1, user_id); //SQLに情報加える
@@ -65,7 +88,7 @@ public class UserDao{
 	 * 取得した値をFieldにセットする処理
 	 * フィールドのpstmtを使用する
 	 */
-	public void executeQueryAndField(){
+	public void executeQueryAndField() throws SQLException {
 		if (pstmt != null) {
 			try {
 				ResultSet rs;
@@ -96,6 +119,7 @@ public class UserDao{
 			userDto.setNickname(rs.getString("nickname"));
 			userDto.setCreated_at(rs.getDate("created_at"));
 			userDto.setUpdate_at(rs.getDate("update_at"));
+			userList.add(userDto);
 		}
 	}
 
@@ -118,7 +142,7 @@ public class UserDao{
 		boolean flag = false;
 		try {
 			Class.forName(CLASSNAME_ORACLE_DRIVER);
-			con = DriverManager.getConnection(URL_ORACLE, 
+			con = DriverManager.getConnection(URL_ORACLE,
 					USERNAME_ORACLE, PASSWORD_ORACLE);
 			pstmt = con.prepareStatement(sql); //SQL使用部
 			con.setAutoCommit(false);

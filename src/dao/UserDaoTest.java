@@ -18,7 +18,12 @@ class UserDaoTest {
 	void testExecuteQueryAndField() {
 		UserDao uda = new UserDao();
 		uda.pstmt = null;
-		uda.executeQueryAndField();
+		try {
+			uda.executeQueryAndField();
+		} catch (SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
 	}
 
 
