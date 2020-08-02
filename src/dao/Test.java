@@ -51,8 +51,21 @@ public class Test {
 //		getUserAll();
 //		System.out.println(new CsvModel().outputUserCSV());
 //		getPossessionAll();
-		System.out.println(new CsvModel().outputPossessionCSV());
+//		System.out.println(new CsvModel().outputPossessionCSV());
+//		getDividendIncomeAll();
+		System.out.println(new CsvModel().outputDividendIncomeCSV());
+	}
 
+	/**
+	 * dividend_income_table全件取得
+	 * テスト結果：成功
+	 * 実施日付：2020/08/02 22:18
+	 */
+	public static void getDividendIncomeAll() {
+		List<DividendIncomeDto> dividendIncomeList = new DividendIncomeDao().getDividendIncomeAll();
+		for (DividendIncomeDto s: dividendIncomeList) {
+            System.out.println(s.getUpdate_at());
+        }
 	}
 	/**
 	 * Possession_TABLE全件取得
