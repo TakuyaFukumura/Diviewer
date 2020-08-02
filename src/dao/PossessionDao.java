@@ -21,6 +21,39 @@ import dto.PossessionDto;
 public class PossessionDao extends BaseDao{
 
 	/**
+	 * possession_table全件取得
+	 * @return 全possession情報
+	 */
+	public List<PossessionDto> getPossessionAll() {
+		//PossessionDto possessionDto = null;
+		list = null;
+		List<PossessionDto> possessionList = new ArrayList<>();
+		String sql = "SELECT * "
+				+ "FROM possession_table ";
+		if (createConnection(sql)) { //DB接続処理
+			try {
+				ResultSet rs;
+				rs = pstmt.executeQuery(); //データベースを検索するメソッドSELECT用
+				while (rs.next()) {
+					PossessionDto possessionDto = new PossessionDto();
+					possessionDto.setUser_id(rs.getString("user_id"));
+					possessionDto.setTicker_id(rs.getInt("ticker_id"));
+					possessionDto.setUnit(rs.getBigDecimal("unit"));
+					possessionDto.setAverage_unit_cost(rs.getBigDecimal("average_unit_cost"));
+					possessionDto.setCreated_at(rs.getDate("created_at"));
+					possessionDto.setUpdate_at(rs.getDate("update_at"));
+					possessionList.add(possessionDto);
+				}
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally{
+				closeConnection(); //DB切断処理
+			}
+		}
+		return possessionList;
+	}
+	/**
 	 * ティッカーシンボルの曖昧検索
 	 * 条件に一致するデータをリストで返す
 	 * @param user_id ユーザID

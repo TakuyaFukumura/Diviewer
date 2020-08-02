@@ -49,8 +49,21 @@ public class Test {
 //		getTickerAll();
 //		System.out.println(new CsvModel().outputTickerCSV());
 //		getUserAll();
-		System.out.println(new CsvModel().outputUserCSV());
+//		System.out.println(new CsvModel().outputUserCSV());
+//		getPossessionAll();
+		System.out.println(new CsvModel().outputPossessionCSV());
 
+	}
+	/**
+	 * Possession_TABLE全件取得
+	 * テスト結果：成功
+	 * 実施日付：2020/08/02 2:08
+	 */
+	public static void getPossessionAll() {
+		List<PossessionDto> possessionList = new PossessionDao().getPossessionAll();
+		for (PossessionDto s: possessionList) {
+            System.out.println(s.getUpdate_at());
+        }
 	}
 	/**
 	 * USER_TABLE全件取得
