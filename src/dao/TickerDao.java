@@ -3,8 +3,13 @@
  */
 package dao;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import dto.TickerDto;
 
@@ -15,6 +20,40 @@ import dto.TickerDto;
 public class TickerDao extends BaseDao{
 	String getTickerldBySymbol_sql = "select * from ticker_table "
 			+ " where ticker_symbol = ? ";
+
+	/**
+	 * ティッカーテーブルの全件取得
+	 * @param ticker_symbol ティッカーシンボル
+	 * @return 成功:情報格納したDTO 失敗時null
+	 * 複数権取得するためDTOのリストで対応しないといけない
+	 */
+	public List<TickerDto> getTickerAll() {
+		List<TickerDto> tickerList = new ArrayList<>();
+		String sql = "select * from ticker_table";
+		try{
+	    	Class.forName(CLASSNAME_ORACLE_DRIVER);
+	    	Connection conn = DriverManager.getConnection(URL_ORACLE, USERNAME_ORACLE, PASSWORD_ORACLE);
+	    	PreparedStatement ps = conn.prepareStatement(sql);
+	        try{
+	        	ResultSet rs = ps.executeQuery();
+	            while (rs.next()) {
+	            	TickerDto tickerDto = new TickerDto();
+	            	tickerDto.setTicker_id(rs.getInt("ticker_id"));
+	            	tickerDto.setTicker_symbol(rs.getString("ticker_symbol"));
+	    			tickerList.add(tickerDto);
+	            }
+	    	} catch (Exception e) {
+	    			e.printStackTrace();
+	    	}
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	    	closeConnection();
+	    }
+		return tickerList;
+	}
 
 	/**
 	 * ティッカーシンボルを削除する

@@ -19,6 +19,38 @@ import dto.DividendIncomeDto;
  * 配当情報の取得編集を行う
  */
 public class DividendIncomeDao extends BaseDao{
+	/**
+	 * dividend_income_table全件取得
+	 * @return 全dividendIncome情報
+	 */
+	public List<DividendIncomeDto> getDividendIncomeAll() {
+		list = null;
+		List<DividendIncomeDto> dividendIncomeList = new ArrayList<>();
+		String sql = "SELECT * FROM dividend_income_table ";
+		if (createConnection(sql)) { //DB接続処理
+			try {
+				ResultSet rs;
+				rs = pstmt.executeQuery(); //データベースを検索するメソッドSELECT用
+				while (rs.next()) {
+					DividendIncomeDto dividendIncomeDto = new DividendIncomeDto();
+					dividendIncomeDto.setDividend_income_id(rs.getInt("dividend_income_id"));
+					dividendIncomeDto.setUser_id(rs.getString("user_id"));
+					dividendIncomeDto.setTicker_id(rs.getInt("ticker_id"));
+					dividendIncomeDto.setReceipt_date(rs.getDate("receipt_date"));
+					dividendIncomeDto.setAftertax_income(rs.getBigDecimal("aftertax_income"));
+					dividendIncomeDto.setCreated_at(rs.getDate("created_at"));
+					dividendIncomeDto.setUpdate_at(rs.getDate("update_at"));
+					dividendIncomeList.add(dividendIncomeDto);
+				}
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally{
+				closeConnection(); //DB切断処理
+			}
+		}
+		return dividendIncomeList;
+	}
 
 	/**
 	 * 指定したユーザかつ年月の配当合計額を取得取得する

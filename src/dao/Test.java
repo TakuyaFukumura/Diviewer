@@ -10,6 +10,7 @@ import dto.DividendIncomeDto;
 import dto.PossessionDto;
 import dto.TickerDto;
 import dto.UserDto;
+import model.CsvModel;
 import model.Model;
 
 /**
@@ -26,7 +27,7 @@ public class Test {
 //		System.out.println("---------------------------------");
 //		getUserById();
 //		System.out.println("---------------------------------");
-		findNewIncom();
+//		findNewIncom();
 //		System.out.println("---------------------------------");
 //		getPossessionBySymbolId();
 //		System.out.println("---------------------------------");
@@ -45,7 +46,69 @@ public class Test {
 //		sumList();
 //		getCartDataString();
 //		getUserById2();
+//		getTickerAll();
+//		System.out.println(new CsvModel().outputTickerCSV());
+//		getUserAll();
+//		System.out.println(new CsvModel().outputUserCSV());
+//		getPossessionAll();
+//		System.out.println(new CsvModel().outputPossessionCSV());
+//		getDividendIncomeAll();
+		System.out.println(new CsvModel().outputDividendIncomeCSV());
+	}
 
+	/**
+	 * dividend_income_table全件取得
+	 * テスト結果：成功
+	 * 実施日付：2020/08/02 22:18
+	 */
+	public static void getDividendIncomeAll() {
+		List<DividendIncomeDto> dividendIncomeList = new DividendIncomeDao().getDividendIncomeAll();
+		for (DividendIncomeDto s: dividendIncomeList) {
+            System.out.println(s.getUpdate_at());
+        }
+	}
+	/**
+	 * Possession_TABLE全件取得
+	 * テスト結果：成功
+	 * 実施日付：2020/08/02 2:08
+	 */
+	public static void getPossessionAll() {
+		List<PossessionDto> possessionList = new PossessionDao().getPossessionAll();
+		for (PossessionDto s: possessionList) {
+            System.out.println(s.getUpdate_at());
+        }
+	}
+	/**
+	 * USER_TABLE全件取得
+	 * テスト結果：成功
+	 * 実施日付：2020/08/01 22:50
+	 */
+	public static void getUserAll() {
+		List<UserDto> userList = new UserDao().getUserAll();
+		for (UserDto s: userList) {
+            System.out.print(s.getUser_id());
+            System.out.print(",");
+            System.out.print(s.getUser_pass());
+            System.out.print(",");
+            System.out.print(s.getNickname());
+            System.out.print(",");
+            System.out.print(s.getCreated_at());
+            System.out.print(",");
+            System.out.println(s.getUpdate_at());
+        }
+	}
+	/**
+	 * TICKER_TABLE全件取得
+	 * テスト結果：成功
+	 * 実施日付：2020/07/30 23:13
+	 */
+	public static void getTickerAll() {
+		List<TickerDto> tickerList = new TickerDao().getTickerAll();
+		for (TickerDto s: tickerList) {
+            System.out.print(s.getTicker_id());
+            System.out.print(",");
+            System.out.println(s.getTicker_symbol());
+        }
 	}
 
 	/**
