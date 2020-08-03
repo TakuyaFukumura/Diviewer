@@ -45,9 +45,9 @@ public class Test {
 //		sumList();
 //		getCartDataString();
 //		getUserById2();
-//		getTickerAll();
+		getTickerAll();
 //		System.out.println(new CsvModel().outputTickerCSV());
-		getUserAll();
+//		getUserAll();
 //		System.out.println(new CsvModel().outputUserCSV());
 //		getPossessionAll();
 //		System.out.println(new CsvModel().outputPossessionCSV());

@@ -67,6 +67,25 @@ public abstract class BasisDao {
 			}
 		}
 	}
+	/**
+	 * 汎用メソッド、select(選択)処理以外を行う、実行時に影響のあった行数を返す 失敗時にはexceptionが設定される
+	 *            select以外の命令
+	 * @return 行数 失敗-1
+	 */
+	protected int executeUpdate() {
+		int updateRowCount = -1;
+		if (pstmt!=null) {
+			try {
+				updateRowCount = pstmt.executeUpdate();
+				con.commit();
+			} catch (SQLException e) {
+				printSQLException(e);
+			}finally{
+				closeConnection();
+			}
+		}
+		return updateRowCount;
+	}
 
 	/**
 	 * SQLの実行結果からデータを取得する処理
