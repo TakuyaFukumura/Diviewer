@@ -10,7 +10,6 @@ import dto.DividendIncomeDto;
 import dto.PossessionDto;
 import dto.TickerDto;
 import dto.UserDto;
-import model.CsvModel;
 import model.Model;
 
 /**
@@ -48,12 +47,12 @@ public class Test {
 //		getUserById2();
 //		getTickerAll();
 //		System.out.println(new CsvModel().outputTickerCSV());
-//		getUserAll();
+		getUserAll();
 //		System.out.println(new CsvModel().outputUserCSV());
 //		getPossessionAll();
 //		System.out.println(new CsvModel().outputPossessionCSV());
 //		getDividendIncomeAll();
-		System.out.println(new CsvModel().outputDividendIncomeCSV());
+//		System.out.println(new CsvModel().outputDividendIncomeCSV());
 	}
 
 	/**
