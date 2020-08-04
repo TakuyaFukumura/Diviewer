@@ -4,9 +4,6 @@
 package dao;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,37 +15,27 @@ import dto.DividendIncomeDto;
  * @author fukumura
  * 配当情報の取得編集を行う
  */
-public class DividendIncomeDao extends BaseDao{
+public class DividendIncomeDao extends BasisDao{
+	private DividendIncomeDto dividendIncomeDto = new DividendIncomeDto();
+	private List<DividendIncomeDto> dividendIncomeList = new ArrayList<>();
+	private boolean flag = false;
+
 	/**
 	 * dividend_income_table全件取得
 	 * @return 全dividendIncome情報
 	 */
 	public List<DividendIncomeDto> getDividendIncomeAll() {
-		list = null;
-		List<DividendIncomeDto> dividendIncomeList = new ArrayList<>();
-		String sql = "SELECT * FROM dividend_income_table ";
-		if (createConnection(sql)) { //DB接続処理
-			try {
-				ResultSet rs;
-				rs = pstmt.executeQuery(); //データベースを検索するメソッドSELECT用
-				while (rs.next()) {
-					DividendIncomeDto dividendIncomeDto = new DividendIncomeDto();
-					dividendIncomeDto.setDividend_income_id(rs.getInt("dividend_income_id"));
-					dividendIncomeDto.setUser_id(rs.getString("user_id"));
-					dividendIncomeDto.setTicker_id(rs.getInt("ticker_id"));
-					dividendIncomeDto.setReceipt_date(rs.getDate("receipt_date"));
-					dividendIncomeDto.setAftertax_income(rs.getBigDecimal("aftertax_income"));
-					dividendIncomeDto.setCreated_at(rs.getDate("created_at"));
-					dividendIncomeDto.setUpdate_at(rs.getDate("update_at"));
-					dividendIncomeList.add(dividendIncomeDto);
-				}
-				rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}finally{
-				closeConnection(); //DB切断処理
-			}
-		}
+		dividendIncomeList = new ArrayList<>();
+		sql = "SELECT * FROM dividend_income_table ";
+		if (openConnection()) {
+	        try{
+	        	executeQuery();
+	    	} catch (SQLException e) {
+	    		printSQLException(e);
+	    	}finally {
+	    		closeConnection();
+	    	}
+	    }
 		return dividendIncomeList;
 	}
 
@@ -59,7 +46,8 @@ public class DividendIncomeDao extends BaseDao{
 	 * @param month 取得したい月
 	 * @return 合計額
 	 */
-	public BigDecimal getSumIncomeByIdAndMonth(String user_id, int year, int month ) {
+	public BigDecimal getSumIncomeByIdAndMonth(String user_id,
+			int year, int month ) {
 		BigDecimal sum = new BigDecimal("0");
 		String start = null;
 		String end = null;
@@ -70,20 +58,24 @@ public class DividendIncomeDao extends BaseDao{
 		}else {
 			end = month < 10 ? "" + year + "-0" + month + "-01" : "" + year + "-" + month + "-01";
 		}
-		String sql = "SELECT SUM(aftertax_income)AS sum_income FROM dividend_income_table "
+		sql = "SELECT SUM(aftertax_income)AS sum_income "
+				+ "FROM dividend_income_table "
 				+ "WHERE receipt_date  >= TO_DATE( ?, 'YYYY-MM-DD') "
-				+ "AND receipt_date  < TO_DATE( ?, 'YYYY-MM-DD') AND user_id = ? ";
-		if (createConnection(sql)) {
+				+ "AND receipt_date  < TO_DATE( ?, 'YYYY-MM-DD') "
+				+ "AND user_id = ? ";
+		if (openConnection()) {
 			try {
 				pstmt.setString(1, start);
 				pstmt.setString(2, end);
 				pstmt.setString(3, user_id);
 				ResultSet rs = pstmt.executeQuery();
-				while (rs.next())
-					if(rs.getBigDecimal("sum_income") != null)
+				while (rs.next()) {
+					if(rs.getBigDecimal("sum_income") != null) {
 						sum = (rs.getBigDecimal("sum_income"));
-			} catch (Exception e) {
-
+					}
+				}
+			} catch (SQLException e) {
+				printSQLException(e);
 			}finally{
 				closeConnection();
 			}
@@ -99,22 +91,23 @@ public class DividendIncomeDao extends BaseDao{
 	 * @param receipt_date 受領日
 	 * @return 成功true 失敗時false
 	 */
-	public boolean update(int dividend_income_id, BigDecimal aftertax_income, String receipt_date) {
-		boolean flag = false;
-		String sql = " UPDATE dividend_income_table "
+	public boolean update(int dividend_income_id,
+			BigDecimal aftertax_income, String receipt_date) {
+		flag = false;
+		sql = " UPDATE dividend_income_table "
 				+ "SET aftertax_income =  ?, "
 				+ "receipt_date = TO_DATE( ?, 'YYYY-MM-DD'), update_at = sysdate "
 				+ "WHERE  dividend_income_id = ? ";
-		if (createConnection(sql)) {
+		if (openConnection()) {
 			try {
 				pstmt.setBigDecimal(1, aftertax_income);
 				pstmt.setString(2, receipt_date);
 				pstmt.setInt(3, dividend_income_id);
-				if (executeComonUpdate() == 1) {
+				if (executeUpdate() == 1) {
 					flag = true;
 				}
 			} catch (SQLException e) {
-
+				printSQLException(e);
 			}finally{
 				closeConnection();
 			}
@@ -131,19 +124,19 @@ public class DividendIncomeDao extends BaseDao{
 	 * @return 成功true 失敗false
 	 */
 	public boolean deleteWithSymbol(String user_id, int ticker_id ) {
-		boolean flag = false; //検索して存在しなければtrue
-		String sql = "DELETE FROM dividend_income_table "
+		flag = false;
+		sql = "DELETE FROM dividend_income_table "
 				+ "WHERE user_id = ? "
 				+ "AND ticker_id = ? ";
-		if (createConnection(sql)) {
+		if (openConnection()) {
 			try {
 				pstmt.setString(1, user_id);
 				pstmt.setInt(2, ticker_id);
-				if (executeComonUpdate() == 1) { //ここが問題
+				if (executeUpdate() == 1) {
 					flag = true;
 				}
 			} catch (SQLException e) {
-
+				printSQLException(e);
 			}finally{
 				closeConnection();
 			}
@@ -158,17 +151,17 @@ public class DividendIncomeDao extends BaseDao{
 	 * @return 成功true 失敗false
 	 */
 	public boolean delete(int dividend_income_id) {
-		boolean flag = false; //検索して存在しなければtrue
-		String sql = "DELETE FROM dividend_income_table "
+		flag = false;
+		sql = "DELETE FROM dividend_income_table "
 				+ "WHERE dividend_income_id = ? ";
-		if (createConnection(sql)) {
+		if (openConnection()) {
 			try {
 				pstmt.setInt(1, dividend_income_id);
-				if (executeComonUpdate() == 1) { //ここが問題
+				if (executeUpdate() == 1) {
 					flag = true;
 				}
 			} catch (SQLException e) {
-
+				printSQLException(e);
 			}finally{
 				closeConnection();
 			}
@@ -185,32 +178,19 @@ public class DividendIncomeDao extends BaseDao{
 	 * @return 配当DTO
 	 */
 	public DividendIncomeDto getDataById(int dividend_income_id) {
-		DividendIncomeDto incomeDto = null;
-		list = null;
-		String sql = "SELECT * FROM dividend_income_table "
-				+ "where dividend_income_id = ? ";
-		if (createConnection(sql)) {
+		sql = "SELECT * FROM dividend_income_table "
+				+ "WHERE dividend_income_id = ? ";
+		if (openConnection()) {
 			try {
 				pstmt.setInt(1, dividend_income_id);
-
-				ResultSet rs = pstmt.executeQuery();
-				while (rs.next()) {
-					incomeDto = new DividendIncomeDto();
-					incomeDto.setDividend_income_id(rs.getInt("dividend_income_id"));
-	    			incomeDto.setUser_id(rs.getString("user_id"));
-	    			incomeDto.setTicker_id(rs.getInt("ticker_id"));
-	    			incomeDto.setReceipt_date(rs.getDate("receipt_date"));
-	    			incomeDto.setAftertax_income(rs.getBigDecimal("aftertax_income"));
-	    			incomeDto.setCreated_at(rs.getDate("created_at"));
-	    			incomeDto.setUpdate_at(rs.getDate("update_at"));
-				}
-			} catch (Exception e) {
-
-			}finally{
-				closeConnection();
+			    executeQuery();
+			} catch (SQLException e) {
+				printSQLException(e);
+			}finally {
+			    closeConnection();
 			}
 		}
-		return incomeDto;
+		return dividendIncomeDto;
 	}
 
 
@@ -224,25 +204,23 @@ public class DividendIncomeDao extends BaseDao{
 	 */
 	public boolean insert(String user_id, int ticker_id,
 			String receipt_date, BigDecimal aftertax_income) {
-		boolean flag = false;
-		String sql = "INSERT INTO dividend_income_table "
+		flag = false;
+		sql = "INSERT INTO dividend_income_table "
 				+ "(user_id, ticker_id, "
 				+ "receipt_date, aftertax_income, "
 				+ "created_at, update_at) "
 				+ "VALUES ( ?, ?, TO_DATE( ?, 'YYYY-MM-DD'), ?, sysdate, sysdate)";
-
-		if (createConnection(sql)) {
+		if (openConnection()) {
 			try {
 				pstmt.setString(1, user_id);
 				pstmt.setInt(2, ticker_id);
 				pstmt.setString(3, receipt_date);
 				pstmt.setBigDecimal(4, aftertax_income);
-
-				if (executeComonUpdate() == 1) {
+				if (executeUpdate() == 1) {
 					flag = true;
 				}
-			} catch (Exception e) {
-
+			} catch (SQLException e) {
+				printSQLException(e);
 			}finally{
 				closeConnection();
 			}
@@ -262,35 +240,31 @@ public class DividendIncomeDao extends BaseDao{
 	 * @return リスト形式のインカムDTO
 	 */
 	public List<DividendIncomeDto> findNewIncom(String user_id) {
-        List<DividendIncomeDto> incomeList = new ArrayList<>();
-        String sql = "SELECT * FROM("
-        		+ "SELECT ticker_symbol,aftertax_income,receipt_date FROM "
-        		+ "dividend_income_table INNER JOIN ticker_table USING (ticker_id) "
-        		+ "WHERE user_id = ? ORDER BY receipt_date DESC) WHERE rownum <= 10";
-	    try{
-	    	Class.forName(CLASSNAME_ORACLE_DRIVER);
-	    	Connection conn = DriverManager.getConnection(URL_ORACLE, USERNAME_ORACLE, PASSWORD_ORACLE);
-	    	PreparedStatement ps = conn.prepareStatement(sql);
+		dividendIncomeList = new ArrayList<>();
+        sql = "SELECT * FROM("
+        		+ "SELECT ticker_symbol,aftertax_income,receipt_date "
+        		+ "FROM dividend_income_table "
+        		+ "INNER JOIN ticker_table USING (ticker_id) "
+        		+ "WHERE user_id = ? ORDER BY receipt_date DESC) "
+        		+ "WHERE rownum <= 10";
+        if (openConnection()) {
 	        try{
-	        	ps.setString(1, user_id);
-	        	ResultSet rs = ps.executeQuery();
-	            while (rs.next()) { //2020061215:50エラー記録rs.nextがfalse 原因はDBの参照にあった
+	        	pstmt.setString(1, user_id);
+	        	ResultSet rs = pstmt.executeQuery();
+	            while (rs.next()) {
 	            	DividendIncomeDto incomeDto = new DividendIncomeDto();
 	    			incomeDto.setTicker_symbol(rs.getString("ticker_symbol"));
 	    			incomeDto.setReceipt_date(rs.getDate("receipt_date"));
 	    			incomeDto.setAftertax_income(rs.getBigDecimal("aftertax_income"));
-	    			incomeList.add(incomeDto);
+	    			dividendIncomeList.add(incomeDto);
 	            }
-	    	} catch (Exception e) {
-	    			e.printStackTrace();
+	    	} catch (SQLException e) {
+	    		printSQLException(e);
+	    	}finally {
+	    		closeConnection();
 	    	}
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
 	    }
-        return incomeList;
+        return dividendIncomeList;
     }
 
 	/**
@@ -300,31 +274,24 @@ public class DividendIncomeDao extends BaseDao{
 	 * @return 配当DTOのリスト
 	 */
 	public List<DividendIncomeDto> findIncomList(String user_id, int ticker_id) {
-        List<DividendIncomeDto> incomeList = new ArrayList<>();
-        String sql = "SELECT * FROM "
+		dividendIncomeList = new ArrayList<>();
+        sql = "SELECT * FROM "
         		+ "dividend_income_table "
         		+ "WHERE ticker_id = ? "
         		+ "AND user_id = ? "
         		+ "ORDER BY receipt_date DESC";
-	    try{
-	    	Class.forName(CLASSNAME_ORACLE_DRIVER);
-	    	Connection conn = DriverManager.getConnection(URL_ORACLE, USERNAME_ORACLE, PASSWORD_ORACLE);
-	    	PreparedStatement ps = conn.prepareStatement(sql);
+        if (openConnection()) {
 	        try{
-	        	ps.setInt(1, ticker_id);
-	        	ps.setString(2, user_id);
-	        	ResultSet rs = ps.executeQuery();
-	        	incomeList = convertReserSet(rs, incomeList);
-	    	} catch (Exception e) {
-	    			e.printStackTrace();
+	        	pstmt.setInt(1, ticker_id);
+	        	pstmt.setString(2, user_id);
+	        	executeQuery();
+	    	} catch (SQLException e) {
+	    		printSQLException(e);
+	    	}finally {
+	    		closeConnection();
 	    	}
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
 	    }
-        return incomeList;
+        return dividendIncomeList;
     }
 
 
@@ -336,39 +303,15 @@ public class DividendIncomeDao extends BaseDao{
 	@Override
 	public void convertReserSet(ResultSet rs) throws SQLException {
 		while (rs.next()) {
-			DividendIncomeDto incomeDto = new DividendIncomeDto();
-			incomeDto.setDividend_income_id(rs.getInt("dividend_income_id"));
-			incomeDto.setUser_id(rs.getString("user_id"));
-			incomeDto.setTicker_id(rs.getInt("ticker_id"));
-			//incomeDto.setTicker_symbol(rs.getString("ticker_symbol"));
-			incomeDto.setReceipt_date(rs.getDate("receipt_date"));
-			incomeDto.setAftertax_income(rs.getBigDecimal("aftertax_income"));
-			incomeDto.setCreated_at(rs.getDate("created_at"));
-			incomeDto.setUpdate_at(rs.getDate("update_at"));
-			list.add(incomeDto);
+			dividendIncomeDto = new DividendIncomeDto();
+			dividendIncomeDto.setDividend_income_id(rs.getInt("dividend_income_id"));
+			dividendIncomeDto.setUser_id(rs.getString("user_id"));
+			dividendIncomeDto.setTicker_id(rs.getInt("ticker_id"));
+			dividendIncomeDto.setReceipt_date(rs.getDate("receipt_date"));
+			dividendIncomeDto.setAftertax_income(rs.getBigDecimal("aftertax_income"));
+			dividendIncomeDto.setCreated_at(rs.getDate("created_at"));
+			dividendIncomeDto.setUpdate_at(rs.getDate("update_at"));
+			dividendIncomeList.add(dividendIncomeDto);
 		}
 	}
-
-	/**
-	 * SQL実行結果から情報を取得する
-	 * @param rs SQL実行結果
-	 * @param incomeList データ格納用のリスト
-	 * @return DBから取り出したデータのリスト
-	 * @throws java.sql.SQLException エラー
-	 */
-	public List<DividendIncomeDto> convertReserSet(ResultSet rs, List<DividendIncomeDto> incomeList) throws SQLException {
-		while (rs.next()) {
-        	DividendIncomeDto incomeDto = new DividendIncomeDto();
-			incomeDto.setDividend_income_id(rs.getInt("dividend_income_id"));
-			incomeDto.setUser_id(rs.getString("user_id"));
-			incomeDto.setTicker_id(rs.getInt("ticker_id"));
-			incomeDto.setReceipt_date(rs.getDate("receipt_date"));
-			incomeDto.setAftertax_income(rs.getBigDecimal("aftertax_income"));
-			incomeDto.setCreated_at(rs.getDate("created_at"));
-			incomeDto.setUpdate_at(rs.getDate("update_at"));
-			incomeList.add(incomeDto);
-        }
-		return incomeList;
-	}
-
 }

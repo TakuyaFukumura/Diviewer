@@ -41,7 +41,7 @@ public abstract class BasisDao {
 			con.setAutoCommit(false);
 			flag = true;
 		} catch (ClassNotFoundException e) {
-
+			e.printStackTrace();
 		} catch (SQLException e) {
 			printSQLException(e);
 		}
