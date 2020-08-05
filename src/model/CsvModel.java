@@ -42,13 +42,16 @@ public class CsvModel {
 		dividendIncomeList = dividendIncomeDao.getDividendIncomeAll();
 		try {
             FileWriter fw = new FileWriter("WebContent/csv/dividend_income_table.csv");
-            fw.write("user_id,ticker_id,receipt_date,aftertax_income,created_at,update_at");
+            fw.write("dividend_income_id,user_id,ticker_id,receipt_date,aftertax_income,created_at,update_at");
             for (DividendIncomeDto tmp: dividendIncomeList) {
+            	String dividend_income_id = String.valueOf(tmp.getDividend_income_id());
             	String ticker_id = String.valueOf(tmp.getTicker_id());
             	String receipt_date = ConvDateToStr(tmp.getReceipt_date());
             	String created_at = ConvDateToStr(tmp.getCreated_at());
             	String update_at = ConvDateToStr(tmp.getUpdate_at());
             	fw.write("\n");
+            	fw.write(dividend_income_id);
+            	fw.write(",");
             	fw.write(tmp.getUser_id());
             	fw.write(",");
             	fw.write(ticker_id);
