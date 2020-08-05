@@ -45,11 +45,11 @@ public class Test {
 //		sumList();
 //		getCartDataString();
 //		getUserById2();
-		getTickerAll();
+//		getTickerAll();
 //		System.out.println(new CsvModel().outputTickerCSV());
 //		getUserAll();
 //		System.out.println(new CsvModel().outputUserCSV());
-//		getPossessionAll();
+		getPossessionAll();
 //		System.out.println(new CsvModel().outputPossessionCSV());
 //		getDividendIncomeAll();
 //		System.out.println(new CsvModel().outputDividendIncomeCSV());
