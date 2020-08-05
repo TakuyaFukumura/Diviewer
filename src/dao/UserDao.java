@@ -3,9 +3,6 @@
  */
 package dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,31 +14,11 @@ import dto.UserDto;
  * @author bx0045
  *ユーザ情報の取得編集処理を行うクラス
  */
-public class UserDao{
-	/** MYSQLドライバ名 */
-	String CLASSNAME_ORACLE_DRIVER = "org.h2.Driver";
-	/** MYSQL接続用URL */
-	String URL_ORACLE = "jdbc:h2:tcp://localhost/~/example";
-	/** MYSQL接続用ユーザ名（root） */
-	String USERNAME_ORACLE = "blackchoco1114";
-	/** MYSQL接続用パスワード（root） */
-	String PASSWORD_ORACLE = "katuo045A";
+public class UserDao extends BasisDao{
 
-	protected Connection con;
-	protected PreparedStatement pstmt;
-	private String sql = "";
 	private UserDto userDto = new UserDto();
 	private List<UserDto> userList = new ArrayList<>();
 
-	/**
-	 * sqlのセッター
-	 * 通常は使う必要がない
-	 * テスト用にSQLを書き換えられるようにする
-	 * @param sql 実行するSQL文
-	 */
-	public void setSql(String sql) {
-		this.sql = sql;
-	}
 	/**
 	 * user_table全件取得
 	 * @return 全ユーザ情報
@@ -52,7 +29,7 @@ public class UserDao{
 				+ "FROM user_table ";
 		if (openConnection()) { //DB接続処理
 			try {
-				executeQueryAndField(); //SQL実行から値取得までの処理
+				executeQuery(); //SQL実行から値取得までの処理
 			} catch (SQLException e) {
 					printSQLException(e);
 			}finally{
@@ -73,7 +50,7 @@ public class UserDao{
 		if (openConnection()) { //DB接続処理
 			try {
 				pstmt.setString(1, user_id); //SQLに情報加える
-				executeQueryAndField(); //SQL実行から値取得までの処理
+				executeQuery(); //SQL実行から値取得までの処理
 			} catch (SQLException e) {
 					printSQLException(e);
 			}finally{
@@ -82,28 +59,6 @@ public class UserDao{
 		}
 		return userDto;
 	}
-
-	/**
-	 * SQLを実行して、
-	 * 取得した値をFieldにセットする処理
-	 * フィールドのpstmtを使用する
-	 */
-	public void executeQueryAndField() throws SQLException {
-		if (pstmt != null) {
-			try {
-				ResultSet rs;
-				rs = pstmt.executeQuery(); //データベースを検索するメソッドSELECT用
-				convertReserSet(rs); //FieldのuserDtoを使用して値セット
-				rs.close();
-			} catch (SQLException e) { //SQLの実行エラー
-				printSQLException(e);
-			}finally{
-				closeConnection(); //DB切断処理
-			}
-		}
-	}
-
-
 
 	/**
 	 * SQLの実行結果からデータを取得する処理
@@ -120,56 +75,6 @@ public class UserDao{
 			userDto.setCreated_at(rs.getDate("created_at"));
 			userDto.setUpdate_at(rs.getDate("update_at"));
 			userList.add(userDto);
-		}
-	}
-
-	/**
-	 * SQLException発生時にエラーメッセージを表示する
-	 * @param e エラーを説明する文字列
-	 */
-	public void printSQLException(SQLException e) {
-		if(e != null) {
-			System.out.println("ERROR CODE :" + e.getErrorCode());
-			System.out.println(pstmt.toString() + "を実行\n" + e.getMessage() + "が発生。");
-		}
-	}
-
-	/**
-	 * DB接続処理
-	 * @return 成功true 失敗false
-	 */
-	public boolean openConnection() {
-		boolean flag = false;
-		try {
-			Class.forName(CLASSNAME_ORACLE_DRIVER);
-			con = DriverManager.getConnection(URL_ORACLE,
-					USERNAME_ORACLE, PASSWORD_ORACLE);
-			pstmt = con.prepareStatement(sql); //SQL使用部
-			con.setAutoCommit(false);
-			flag = true;
-		} catch (ClassNotFoundException e) {
-
-		} catch (SQLException e) {
-			printSQLException(e);
-		}
-		return flag;
-	}
-
-	/**
-	 * DB切断処理
-	 */
-	public void closeConnection() {
-		try {
-			if (pstmt != null) {
-				pstmt.close();
-			}
-			pstmt = null;
-			if (con != null) {
-				con.close();
-			}
-			con = null;
-		} catch (SQLException e) {
-			printSQLException(e);
 		}
 	}
 }
