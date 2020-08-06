@@ -53,7 +53,9 @@ public class Test {
 //		getPossessionAll();
 //		System.out.println(new CsvModel().outputPossessionCSV());
 //		getDividendIncomeAll();
-		System.out.println(new CsvModel().outputDividendIncomeCSV());
+//		System.out.println(new CsvModel().outputDividendIncomeCSV());
+		System.out.println(new CsvModel().inputIncomeCSV());
+//		new DividendIncomeDao().allDelete(); //DB初期化
 	}
 
 	/**
