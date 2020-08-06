@@ -21,6 +21,39 @@ public class DividendIncomeDao extends BasisDao{
 	private boolean flag = false;
 
 	/**
+	 * データを登録
+	 * @param user_id ユーザID
+	 * @param ticker_id ティッカーID
+	 * @param receipt_date 受領日
+	 * @param aftertax_income 税引き後受領額
+	 * @return 成功true 失敗false
+	 */
+	public boolean csvInsert(int dividend_income_id, String user_id,
+			int ticker_id,String receipt_date, BigDecimal aftertax_income) {
+		flag = false;
+		sql = "INSERT INTO dividend_income_table "
+				+ "VALUES ( ?, ?, ?,  TO_DATE( ?, 'YYYY-MM-DD'),"
+				+ " ?,  TO_DATE( ?, 'YYYY-MM-DD'),  TO_DATE( ?, 'YYYY-MM-DD'))";
+		if (openConnection()) {
+			try {
+				pstmt.setInt(1, dividend_income_id);
+				pstmt.setString(2, user_id);
+				pstmt.setInt(3, ticker_id);
+				pstmt.setString(4, receipt_date);
+				pstmt.setBigDecimal(5, aftertax_income);
+				if (executeUpdate() == 1) {
+					flag = true;
+				}
+			} catch (SQLException e) {
+				printSQLException(e);
+			}finally{
+				closeConnection();
+			}
+		}
+		return flag;
+	}
+
+	/**
 	 * dividend_income_table全件取得
 	 * @return 全dividendIncome情報
 	 */
@@ -162,6 +195,24 @@ public class DividendIncomeDao extends BasisDao{
 				}
 			} catch (SQLException e) {
 				printSQLException(e);
+			}finally{
+				closeConnection();
+			}
+		}
+		return flag;
+	}
+	/**
+	 * 配当情報をすべて削除する
+	 * @return 成功true 失敗false
+	 */
+	public boolean allDelete() {
+		flag = false;
+		sql = "DELETE FROM dividend_income_table ";
+		if (openConnection()) {
+			try {
+				if (executeUpdate() == 1) {
+					flag = true;
+				}
 			}finally{
 				closeConnection();
 			}
