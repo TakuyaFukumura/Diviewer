@@ -20,6 +20,46 @@ public class PossessionDao extends BasisDao{
 	private List<PossessionDto> possessionList = new ArrayList<>();
 	private boolean flag = false;
 
+
+	/**
+	 * データを登録
+	 * @param user_id ユーザID
+	 * @param ticker_id ティッカーID
+	 * @param unit 保有数量
+	 * @param average_unit_cost 平均取得単価
+	 * @param created_at 作成日
+	 * @param update_at 更新日
+	 * @return 成功true 失敗false
+	 */
+	public boolean csvInsert(String user_id, String ticker_id,
+			String unit, String average_unit_cost,
+			String created_at, String update_at ) {
+		int tickerId = Integer.parseInt(ticker_id);
+		BigDecimal u = new BigDecimal(unit);
+		BigDecimal averageUnitCost = new BigDecimal(average_unit_cost);
+		flag = false;
+		sql = "INSERT INTO possession_table values ( ?, ?, ?, ?, "
+				+ "TO_DATE( ?, 'YYYY-MM-DD'), TO_DATE( ?, 'YYYY-MM-DD') )";
+		if (openConnection()) {
+			try {
+				pstmt.setString(1, user_id);
+				pstmt.setInt(2, tickerId);
+				pstmt.setBigDecimal(3, u);
+				pstmt.setBigDecimal(4, averageUnitCost);
+				pstmt.setString(5, created_at);
+				pstmt.setString(6, update_at);
+				if (executeUpdate() == 1) {
+					flag = true;
+				}
+			} catch (SQLException e) {
+				printSQLException(e);
+			}finally{
+				closeConnection();
+			}
+		}
+		return flag;
+	}
+
 	/**
 	 * possession_table全件取得
 	 * @return 全possession情報
@@ -88,6 +128,25 @@ public class PossessionDao extends BasisDao{
 				}
 			} catch (SQLException e) {
 				printSQLException(e);
+			}finally{
+				closeConnection();
+			}
+		}
+		return flag;
+	}
+
+	/**
+	 * possession_table初期化
+	 * @return 成功true 失敗false
+	 */
+	public boolean delete() {
+		flag = false; //検索して存在しなければtrue
+		sql = "DELETE FROM possession_table ";
+		if (openConnection()) {
+			try {
+				if (executeUpdate() == 1) {
+					flag = true;
+				}
 			}finally{
 				closeConnection();
 			}
