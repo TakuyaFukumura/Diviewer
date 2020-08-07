@@ -18,8 +18,6 @@ import dto.PossessionDto;
 public class PossessionDao extends BasisDao{
 	private PossessionDto possessionDto = new PossessionDto();
 	private List<PossessionDto> possessionList = new ArrayList<>();
-	private boolean flag = false;
-
 
 	/**
 	 * データを登録
@@ -31,7 +29,7 @@ public class PossessionDao extends BasisDao{
 	 * @param update_at 更新日
 	 * @return 成功true 失敗false
 	 */
-	public boolean csvInsert(String user_id, String ticker_id,
+	public boolean insert(String user_id, String ticker_id,
 			String unit, String average_unit_cost,
 			String created_at, String update_at ) {
 		int tickerId = Integer.parseInt(ticker_id);
@@ -140,18 +138,8 @@ public class PossessionDao extends BasisDao{
 	 * @return 成功true 失敗false
 	 */
 	public boolean delete() {
-		flag = false; //検索して存在しなければtrue
 		sql = "DELETE FROM possession_table ";
-		if (openConnection()) {
-			try {
-				if (executeUpdate() == 1) {
-					flag = true;
-				}
-			}finally{
-				closeConnection();
-			}
-		}
-		return flag;
+		return deleteAll();
 	}
 
 	/**

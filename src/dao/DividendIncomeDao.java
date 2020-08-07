@@ -18,7 +18,6 @@ import dto.DividendIncomeDto;
 public class DividendIncomeDao extends BasisDao{
 	private DividendIncomeDto dividendIncomeDto = new DividendIncomeDto();
 	private List<DividendIncomeDto> dividendIncomeList = new ArrayList<>();
-	private boolean flag = false;
 
 	/**
 	 * CSVからデータを登録
@@ -31,7 +30,7 @@ public class DividendIncomeDao extends BasisDao{
 	 * @param update_at 更新日
 	 * @return 成功true 失敗false
 	 */
-	public boolean csvInsert(String dividend_income_id, String user_id,
+	public boolean insert(String dividend_income_id, String user_id,
 			String ticker_id,String receipt_date, String aftertax_income,
 			String created_at, String update_at) {
 		int dividendIncomeId = Integer.parseInt(dividend_income_id);
@@ -215,18 +214,8 @@ public class DividendIncomeDao extends BasisDao{
 	 * @return 成功true 失敗false
 	 */
 	public boolean delete() {
-		flag = false;
 		sql = "DELETE FROM dividend_income_table ";
-		if (openConnection()) {
-			try {
-				if (executeUpdate() == 1) {
-					flag = true;
-				}
-			}finally{
-				closeConnection();
-			}
-		}
-		return flag;
+		return deleteAll();
 	}
 
 
