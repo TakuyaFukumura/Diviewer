@@ -18,7 +18,48 @@ import dto.DividendIncomeDto;
 public class DividendIncomeDao extends BasisDao{
 	private DividendIncomeDto dividendIncomeDto = new DividendIncomeDto();
 	private List<DividendIncomeDto> dividendIncomeList = new ArrayList<>();
-	private boolean flag = false;
+
+	/**
+	 * CSVからデータを登録
+	 * @param dividend_income_id インカムID
+	 * @param user_id ユーザID
+	 * @param ticker_id ティッカーID
+	 * @param receipt_date 受領日
+	 * @param aftertax_income 税引き後受領額
+	 * @param created_at 作成日
+	 * @param update_at 更新日
+	 * @return 成功true 失敗false
+	 */
+	public boolean insert(String dividend_income_id, String user_id,
+			String ticker_id,String receipt_date, String aftertax_income,
+			String created_at, String update_at) {
+		int dividendIncomeId = Integer.parseInt(dividend_income_id);
+		int tickerId = Integer.parseInt(ticker_id);
+		BigDecimal aftertaxIncome = new BigDecimal(aftertax_income);
+		flag = false;
+		sql = "INSERT INTO dividend_income_table "
+				+ "VALUES ( ?, ?, ?,  TO_DATE( ?, 'YYYY-MM-DD'),"
+				+ " ?,  TO_DATE( ?, 'YYYY-MM-DD'),  TO_DATE( ?, 'YYYY-MM-DD'))";
+		if (openConnection()) {
+			try {
+				pstmt.setInt(1, dividendIncomeId);
+				pstmt.setString(2, user_id);
+				pstmt.setInt(3, tickerId);
+				pstmt.setString(4, receipt_date);
+				pstmt.setBigDecimal(5, aftertaxIncome);
+				pstmt.setString(6, created_at);
+				pstmt.setString(7, update_at);
+				if (executeUpdate() == 1) {
+					flag = true;
+				}
+			} catch (SQLException e) {
+				printSQLException(e);
+			}finally{
+				closeConnection();
+			}
+		}
+		return flag;
+	}
 
 	/**
 	 * dividend_income_table全件取得
@@ -167,6 +208,14 @@ public class DividendIncomeDao extends BasisDao{
 			}
 		}
 		return flag;
+	}
+	/**
+	 * 配当情報をすべて削除する
+	 * @return 成功true 失敗false
+	 */
+	public boolean delete() {
+		sql = "DELETE FROM dividend_income_table ";
+		return deleteAll();
 	}
 
 

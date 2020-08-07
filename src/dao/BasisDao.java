@@ -26,6 +26,7 @@ public abstract class BasisDao {
 	protected Connection con;
 	protected PreparedStatement pstmt;
 	protected String sql = "";
+	protected boolean flag = false;
 
 	/**
 	 * DB接続処理
@@ -44,6 +45,24 @@ public abstract class BasisDao {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			printSQLException(e);
+		}
+		return flag;
+	}
+
+	/**
+	 * テーブル初期化
+	 * @return 成功true 失敗false
+	 */
+	public boolean deleteAll() {
+		flag = false;
+		if (openConnection()) {
+			try {
+				if (executeUpdate() == 1) {
+					flag = true;
+				}
+			}finally{
+				closeConnection();
+			}
 		}
 		return flag;
 	}

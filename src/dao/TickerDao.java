@@ -17,7 +17,30 @@ import dto.TickerDto;
 public class TickerDao extends BasisDao{
 	private TickerDto tickerDto = new TickerDto();
 	private List<TickerDto> tickerList = new ArrayList<>();
-	private boolean flag = false;
+
+	/**
+	 * CSVからティッカー情報をテーブルに追加する
+	 * @return 成功true 失敗false
+	 */
+	public boolean insert(String ticker_id, String ticker_symbol ) {
+		flag = false;
+		int tickerId = Integer.parseInt(ticker_id);
+		sql = "INSERT INTO ticker_table VALUES ( ?, ? )";
+		if (openConnection()) {
+			try {
+				pstmt.setInt(1, tickerId);
+				pstmt.setString(2, ticker_symbol);
+				if (executeUpdate() == 1) {
+					flag = true;
+				}
+			} catch (SQLException e) {
+				printSQLException(e);
+			}finally{
+				closeConnection();
+			}
+		}
+		return flag;
+	}
 
 	/**
 	 * ティッカーテーブルの全件取得
@@ -61,6 +84,15 @@ public class TickerDao extends BasisDao{
 			}
 		}
 		return flag;
+	}
+
+	/**
+	 * ティッカーテーブル初期化
+	 * @return 成功true 失敗false
+	 */
+	public boolean delete() {
+		sql = "DELETE FROM ticker_table ";
+		return deleteAll();
 	}
 
 
