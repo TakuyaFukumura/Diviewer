@@ -43,18 +43,62 @@ public class CsvModel {
 	private Pattern p = Pattern.compile(",");
 
 	/**
+	 * user_table情報をCSV入力する
+	 * @return 成功true 失敗false
+	 */
+	public boolean inputUserCSV() {
+		flag = false;
+		filename = "WebContent/csv/user_table.csv";
+		try (var reader = new BufferedReader(new FileReader(new File(filename)))) {
+			line = reader.readLine();
+			while((line = reader.readLine()) != null) {
+			    String[] result = p.split(line);//2行目からコンマで分解 for (int i=0; i<result.length; i++) System.out.print("[" + result[i] + "]");System.out.println("");
+			    userDao.insert(result[0],result[1],
+			    		result[2],result[3],result[4]);
+			}
+			flag = true; //成功か失敗か
+		} catch (FileNotFoundException e) { // "C:\\tmp\\samplefile.txt" is not exists
+			e.printStackTrace();
+		} catch (IOException e) { // failed to read file
+			e.printStackTrace();
+		}
+		return flag;
+	}
+
+	/**
+	 * ticker_table情報をCSV入力する
+	 * @return 成功true 失敗false
+	 */
+	public boolean inputTickerCSV() {
+		flag = false;
+		filename = "WebContent/csv/ticker_table.csv";
+		try (var reader = new BufferedReader(new FileReader(new File(filename)))) {
+			line = reader.readLine();
+			while((line = reader.readLine()) != null) {
+			    String[] result = p.split(line);//2行目からコンマで分解 for (int i=0; i<result.length; i++) System.out.print("[" + result[i] + "]");System.out.println("");
+			    tickerDao.insert(result[0],result[1]);
+			}
+			flag = true; //成功か失敗か
+		} catch (FileNotFoundException e) { // "C:\\tmp\\samplefile.txt" is not exists
+			e.printStackTrace();
+		} catch (IOException e) { // failed to read file
+			e.printStackTrace();
+		}
+		return flag;
+	}
+
+	/**
 	 * possession_table情報をCSV入力する
-	 * @return 削除成功true 削除失敗false
+	 * @return 成功true 失敗false
 	 */
 	public boolean inputPossessionCSV() {
 		flag = false;
-		possessionDao.delete(); //DB初期化
 		filename = "WebContent/csv/possession_table.csv";
 		try (var reader = new BufferedReader(new FileReader(new File(filename)))) {
 			line = reader.readLine();
 			while((line = reader.readLine()) != null) {
 			    String[] result = p.split(line);//2行目からコンマで分解 for (int i=0; i<result.length; i++) System.out.print("[" + result[i] + "]");System.out.println("");
-			    possessionDao.csvInsert(result[0],
+			    possessionDao.insert(result[0],
 			    		result[1],result[2],result[3],
 			    		result[4],result[5]);//取得データをDBにインサート
 			}
@@ -69,17 +113,16 @@ public class CsvModel {
 
 	/**
 	 * dividend_income_table情報をCSV入力する
-	 * @return 削除成功true 削除失敗false
+	 * @return 成功true 失敗false
 	 */
 	public boolean inputIncomeCSV() {
 		flag = false;
-		dividendIncomeDao.delete(); //DB初期化
 		filename = "WebContent/csv/dividend_income_table.csv";
 		try (var reader = new BufferedReader(new FileReader(new File(filename)))) {
 			line = reader.readLine();
 			while((line = reader.readLine()) != null) {
 			    String[] result = p.split(line);//2行目からコンマで分解 for (int i=0; i<result.length; i++) System.out.print("[" + result[i] + "]");System.out.println("");
-			    dividendIncomeDao.csvInsert(result[0],
+			    dividendIncomeDao.insert(result[0],
 			    		result[1],result[2],result[3],
 			    		result[4],result[5],result[6]);//取得データをDBにインサート
 			}
@@ -94,7 +137,7 @@ public class CsvModel {
 
 	/**
 	 * dividend_income_table情報をCSV出力する
-	 * @return 削除成功true 削除失敗false
+	 * @return 成功true 失敗false
 	 */
 	public boolean outputDividendIncomeCSV() {
 		flag = false;
@@ -132,7 +175,7 @@ public class CsvModel {
 	}
 	/**
 	 * possession_table情報をCSV出力する
-	 * @return 削除成功true 削除失敗false
+	 * @return 成功true 失敗false
 	 */
 	public boolean outputPossessionCSV() {
 		flag = false;
@@ -166,7 +209,7 @@ public class CsvModel {
 	}
 	/**
 	 * user_table情報をCSV出力する
-	 * @return 削除成功true 削除失敗false
+	 * @return 成功true 失敗false
 	 */
 	public boolean outputUserCSV() {
 		flag = false;
@@ -197,7 +240,7 @@ public class CsvModel {
 	}
 	/**
 	 * ticker_table情報をCSV出力する
-	 * @return 削除成功true 削除失敗false
+	 * @return 成功true 失敗false
 	 */
 	public boolean outputTickerCSV() {
 		flag = false;

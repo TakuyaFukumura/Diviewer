@@ -54,8 +54,14 @@ public class Test {
 //		System.out.println(new CsvModel().outputPossessionCSV());
 //		getDividendIncomeAll();
 //		System.out.println(new CsvModel().outputDividendIncomeCSV());
-		System.out.println(new CsvModel().inputIncomeCSV());
-//		new DividendIncomeDao().allDelete(); //DB初期化
+//		System.out.println(new CsvModel().inputIncomeCSV());
+//		System.out.println(new CsvModel().inputPossessionCSV());
+//		System.out.println(new CsvModel().inputTickerCSV());
+		System.out.println(new CsvModel().inputUserCSV());
+//		new DividendIncomeDao().delete(); //DB初期化
+//		new PossessionDao().delete();
+//		new TickerDao().delete();
+//		new UserDao().delete();
 	}
 
 	/**
