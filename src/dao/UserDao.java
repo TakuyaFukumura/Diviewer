@@ -20,6 +20,43 @@ public class UserDao extends BasisDao{
 	private List<UserDto> userList = new ArrayList<>();
 
 	/**
+	 * CSVからユーザー情報をテーブルに追加する
+	 * @return 成功true 失敗false
+	 */
+	public boolean insert(String user_id, String user_pass,
+			String nickname, String created_at, String update_at) {
+		flag = false;
+		sql = "INSERT INTO user_table VALUES ( ?, ?, ?,"
+				+ "TO_DATE( ?, 'YYYY-MM-DD'), TO_DATE( ?, 'YYYY-MM-DD') )";
+		if (openConnection()) {
+			try {
+				pstmt.setString(1, user_id);
+				pstmt.setString(2, user_pass);
+				pstmt.setString(3, nickname);
+				pstmt.setString(4, created_at);
+				pstmt.setString(5, update_at);
+				if (executeUpdate() == 1) {
+					flag = true;
+				}
+			} catch (SQLException e) {
+				printSQLException(e);
+			}finally{
+				closeConnection();
+			}
+		}
+		return flag;
+	}
+
+	/**
+	 * ティッカーテーブル初期化
+	 * @return 成功true 失敗false
+	 */
+	public boolean delete() {
+		sql = "DELETE FROM user_table ";
+		return deleteAll();
+	}
+
+	/**
 	 * user_table全件取得
 	 * @return 全ユーザ情報
 	 */
