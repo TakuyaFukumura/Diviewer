@@ -47,6 +47,19 @@ public class CsvModel {
 	 * テーブルを初期化してCSV入力していく
 	 * @return 成功true 失敗false
 	 */
+	public boolean outputAllCSV() {
+		flag = outputDividendIncomeCSV();
+		if(flag) flag = outputTickerCSV();
+		if(flag) flag = outputUserCSV();
+		if(flag) flag = outputPossessionCSV();
+		return flag;
+	}
+
+	/**
+	 * 順番を考えつつ（INCOME→PO→TICKER→USER）
+	 * テーブルを初期化してCSV入力していく
+	 * @return 成功true 失敗false
+	 */
 	public boolean inputAllCSV() {
 		flag = dividendIncomeDao.delete(); //table初期化
 		if(flag) flag = possessionDao.delete();
