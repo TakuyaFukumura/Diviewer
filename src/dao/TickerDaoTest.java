@@ -84,18 +84,18 @@ class TickerDaoTest {
 		assertEquals(expected, actual);
 	}
 
-	/**
-	 * 不正なクエリが発行された際、
-	 * nullが返ることを確認する
-	 */
-	@Test
-	void testGetTickerldBySymbolNull4() {
-		TickerDao tickerDao = new TickerDao();
-		TickerDto expected = null;
-		tickerDao.getTickerldBySymbol_sql = "test";
-		TickerDto actual =  tickerDao.getTickerldBySymbol(null);
-		assertEquals(expected, actual);
-	}
+//	/**
+//	 * 不正なクエリが発行された際、
+//	 * nullが返ることを確認する
+//	 */
+//	@Test
+//	void testGetTickerldBySymbolNull4() {
+//		TickerDao tickerDao = new TickerDao();
+//		TickerDto expected = null;
+//		tickerDao.getTickerldBySymbol_sql = "test";
+//		TickerDto actual =  tickerDao.getTickerldBySymbol(null);
+//		assertEquals(expected, actual);
+//	}
 
 	/**
 	 * ティッカーID23を使用して、

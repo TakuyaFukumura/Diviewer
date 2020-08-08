@@ -19,7 +19,7 @@ class UserDaoTest {
 		UserDao uda = new UserDao();
 		uda.pstmt = null;
 		try {
-			uda.executeQueryAndField();
+			uda.executeQuery();
 		} catch (SQLException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
@@ -37,36 +37,36 @@ class UserDaoTest {
 		uda.printSQLException(e);
 	}
 
-	/**
-	 * DB接続処理で、
-	 * 不正なクエリを使用した際に
-	 * 結果がnullとなることを確認する
-	 */
-	@Test
-	void testGetUserById3() {
-		UserDao uda = new UserDao();
-		UserDto expected = null;
-		UserDto actual = new UserDto();
-		uda.setSql("select * fro");
-		actual =  uda.getUserById("fukumura");
-		assertEquals(expected, actual);
-	}
+//	/**
+//	 * DB接続処理で、
+//	 * 不正なクエリを使用した際に
+//	 * 結果がnullとなることを確認する
+//	 */
+//	@Test
+//	void testGetUserById3() {
+//		UserDao uda = new UserDao();
+//		UserDto expected = null;
+//		UserDto actual = new UserDto();
+//		uda.setSql("select * fro");
+//		actual =  uda.getUserById("fukumura");
+//		assertEquals(expected, actual);
+//	}
 
-	/**
-	 * DB接続処理で、
-	 * oracleドライバー名が不正で接続に失敗した際
-	 * 結果がnullとなることを確認する
-	 */
-	@Test
-	void testGetUserById4() {
-		UserDao uda = new UserDao();
-		UserDto expected = null;
-		UserDto actual = new UserDto();
-		uda.setSql("select * fro");
-		uda.CLASSNAME_ORACLE_DRIVER = "fuku";
-		actual =  uda.getUserById("fukumura");
-		assertEquals(expected, actual);
-	}
+//	/**
+//	 * DB接続処理で、
+//	 * oracleドライバー名が不正で接続に失敗した際
+//	 * 結果がnullとなることを確認する
+//	 */
+//	@Test
+//	void testGetUserById4() {
+//		UserDao uda = new UserDao();
+//		UserDto expected = null;
+//		UserDto actual = new UserDto();
+//		uda.setSql("select * fro");
+//		uda.CLASSNAME_ORACLE_DRIVER = "fuku";
+//		actual =  uda.getUserById("fukumura");
+//		assertEquals(expected, actual);
+//	}
 
 
 //	/**
