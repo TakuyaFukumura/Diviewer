@@ -43,8 +43,7 @@ public class CsvModel {
 	private Pattern p = Pattern.compile(",");
 
 	/**
-	 * 順番を考えつつ（INCOME→PO→TICKER→USER）
-	 * テーブルを初期化してCSV入力していく
+	 * 全テーブルをCSV出力していく
 	 * @return 成功true 失敗false
 	 */
 	public boolean outputAllCSV() {
@@ -61,15 +60,24 @@ public class CsvModel {
 	 * @return 成功true 失敗false
 	 */
 	public boolean inputAllCSV() {
-		flag = dividendIncomeDao.delete(); //table初期化
-		if(flag) flag = possessionDao.delete();
-		if(flag) flag = tickerDao.delete();
-		if(flag) flag = userDao.delete();
+		flag = initializationTable(); //table初期化
 		if(flag) flag = inputTickerCSV(); //CSVから読み込む
 		if(flag) flag = inputUserCSV();
 		if(flag) flag = inputPossessionCSV();
 		if(flag) flag = inputIncomeCSV();
 		return flag; //TODO 途中で処理止まったらどうする？
+	}
+	/**
+	 * 順番を考えつつ（INCOME→PO→TICKER→USER）
+	 * テーブルを初期化する
+	 * @return 成功true 失敗false
+	 */
+	public boolean initializationTable() {
+		flag = dividendIncomeDao.delete();
+		if(flag) flag = possessionDao.delete();
+		if(flag) flag = tickerDao.delete();
+		if(flag) flag = userDao.delete();
+		return flag;
 	}
 
 	/**
