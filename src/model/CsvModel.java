@@ -47,10 +47,10 @@ public class CsvModel {
 	 * @return 成功true 失敗false
 	 */
 	public boolean outputAllCSV() {
-		flag = outputDividendIncomeCSV();
-		if(flag) flag = outputTickerCSV();
-		if(flag) flag = outputUserCSV();
-		if(flag) flag = outputPossessionCSV();
+		flag = writeDividendIncomeCSV();
+		if(flag) flag = writeTickerCSV();
+		if(flag) flag = writeUserCSV();
+		if(flag) flag = writePossessionCSV();
 		return flag;
 	}
 
@@ -177,7 +177,7 @@ public class CsvModel {
 	 * dividend_income_table情報をCSV出力する
 	 * @return 成功true 失敗false
 	 */
-	public boolean outputDividendIncomeCSV() {
+	public boolean writeDividendIncomeCSV() {
 		flag = false;
 		dividendIncomeList = dividendIncomeDao.getDividendIncomeAll();
 		try {
@@ -215,7 +215,7 @@ public class CsvModel {
 	 * possession_table情報をCSV出力する
 	 * @return 成功true 失敗false
 	 */
-	public boolean outputPossessionCSV() {
+	public boolean writePossessionCSV() {
 		flag = false;
 		possessionList = possessionDao.getPossessionAll();
 		try {
@@ -249,7 +249,7 @@ public class CsvModel {
 	 * user_table情報をCSV出力する
 	 * @return 成功true 失敗false
 	 */
-	public boolean outputUserCSV() {
+	public boolean writeUserCSV() {
 		flag = false;
 		userList = userDao.getUserAll();
 		try {
@@ -280,7 +280,7 @@ public class CsvModel {
 	 * ticker_table情報をCSV出力する
 	 * @return 成功true 失敗false
 	 */
-	public boolean outputTickerCSV() {
+	public boolean writeTickerCSV() {
 		flag = false;
 		tickerList = tickerDao.getTickerAll();
 		try {
