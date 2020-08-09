@@ -44,6 +44,7 @@ public class CsvModel {
 
 	/**
 	 * 全テーブルをCSV出力していく
+	 * パスはデフォ設定を使用する
 	 * @return 成功true 失敗false
 	 */
 	public boolean outputAllCSV() {
