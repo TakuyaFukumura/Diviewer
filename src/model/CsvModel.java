@@ -56,15 +56,15 @@ public class CsvModel {
 
 	/**
 	 * 順番を考えつつ（INCOME→PO→TICKER→USER）
-	 * テーブルを初期化してCSV入力していく
+	 * テーブルを初期化してCSV入力していく デフォ設定
 	 * @return 成功true 失敗false
 	 */
 	public boolean inputAllCSV() {
 		flag = initializationTable(); //table初期化
-		if(flag) flag = inputTickerCSV(); //CSVから読み込む
-		if(flag) flag = inputUserCSV();
-		if(flag) flag = inputPossessionCSV();
-		if(flag) flag = inputIncomeCSV();
+		if(flag) flag = readeTickerCSV(null); //CSVから読み込む
+		if(flag) flag = readeUserCSV(null);
+		if(flag) flag = readePossessionCSV(null);
+		if(flag) flag = readeIncomeCSV(null);
 		return flag; //TODO 途中で処理止まったらどうする？
 	}
 	/**
@@ -82,11 +82,14 @@ public class CsvModel {
 
 	/**
 	 * user_table情報をCSV入力する
+	 * param csvFileName 読み込むファイル名 default Null
 	 * @return 成功true 失敗false
 	 */
-	public boolean inputUserCSV() {
+	public boolean readeUserCSV(String csvFileName) {
 		flag = false;
-		filename = "WebContent/csv/user_table.csv";
+		String fileName ="user_table.csv";
+		if(csvFileName != null) fileName = csvFileName;
+		filename = "WebContent/csv/" + fileName;
 		try (var reader = new BufferedReader(new FileReader(new File(filename)))) {
 			line = reader.readLine();
 			while((line = reader.readLine()) != null) {
@@ -105,11 +108,14 @@ public class CsvModel {
 
 	/**
 	 * ticker_table情報をCSV入力する
+	 * param csvFileName 読み込むファイル名 default Null
 	 * @return 成功true 失敗false
 	 */
-	public boolean inputTickerCSV() {
+	public boolean readeTickerCSV(String csvFileName) {
 		flag = false;
-		filename = "WebContent/csv/ticker_table.csv";
+		String fileName ="ticker_table.csv";
+		if(csvFileName != null) fileName = csvFileName;
+		filename = "WebContent/csv/" + fileName;
 		try (var reader = new BufferedReader(new FileReader(new File(filename)))) {
 			line = reader.readLine();
 			while((line = reader.readLine()) != null) {
@@ -127,11 +133,14 @@ public class CsvModel {
 
 	/**
 	 * possession_table情報をCSV入力する
+	 * param csvFileName 読み込むファイル名 default Null
 	 * @return 成功true 失敗false
 	 */
-	public boolean inputPossessionCSV() {
+	public boolean readePossessionCSV(String csvFileName) {
 		flag = false;
-		filename = "WebContent/csv/possession_table.csv";
+		String fileName ="possession_table.csv";
+		if(csvFileName != null) fileName = csvFileName;
+		filename = "WebContent/csv/" + fileName;
 		try (var reader = new BufferedReader(new FileReader(new File(filename)))) {
 			line = reader.readLine();
 			while((line = reader.readLine()) != null) {
@@ -151,11 +160,14 @@ public class CsvModel {
 
 	/**
 	 * dividend_income_table情報をCSV入力する
+	 * param csvFileName 読み込むファイル名 default Null
 	 * @return 成功true 失敗false
 	 */
-	public boolean inputIncomeCSV() {
+	public boolean readeIncomeCSV(String csvFileName) {
 		flag = false;
-		filename = "WebContent/csv/dividend_income_table.csv";
+		String fileName ="dividend_income_table.csv";
+		if(csvFileName != null) fileName = csvFileName;
+		filename = "WebContent/csv/" + fileName;
 		try (var reader = new BufferedReader(new FileReader(new File(filename)))) {
 			line = reader.readLine();
 			while((line = reader.readLine()) != null) {
