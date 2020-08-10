@@ -10,12 +10,14 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 
 import dao.PossessionDao;
+import test.BaseTest;
 
 /**
  * @author bx0045
  * 所持情報の取得編集処理のテストクラス
  */
-class PossessionDaoTest {
+class PossessionDaoTest extends BaseTest {
+	private PossessionDao pd = new PossessionDao();
 
 	/**
 	 * 所持情報の曖昧検索を行えているか検証する
@@ -25,7 +27,6 @@ class PossessionDaoTest {
 	 */
 	@Test
 	void testSearchPossession() {
-		PossessionDao pd = new PossessionDao();
 		BigDecimal expected = new BigDecimal("1");
 		BigDecimal actual =  pd.searchPossession("fukumura", "MAIN").get(0).getUnit();
 		assertEquals(expected, actual);
@@ -112,12 +113,11 @@ class PossessionDaoTest {
 	 */
 	@Test
 	void testInsertAndUpdateAndDelete() {
-		PossessionDao pd = new PossessionDao();
 		boolean flag = false;
-		if(pd.insert("fukumura", 23, new BigDecimal("1"), new BigDecimal("0.26")) &&
-				pd.update("fukumura", 23, "VT",
+		if(pd.insert("fukumura", 6, new BigDecimal("1"), new BigDecimal("0.26")) &&
+				pd.update("fukumura", 6, "SPDY",
 						new BigDecimal("2"), new BigDecimal("0.3"), "2020-02-01") &&
-				pd.delete("VT","fukumura"))
+				pd.delete("SPDY","fukumura"))
 				flag = true;
 		assertTrue(flag);
 	}
@@ -130,7 +130,6 @@ class PossessionDaoTest {
 	 */
 	@Test
 	void testGetPossessionBySymbolId() {
-		PossessionDao pd = new PossessionDao();
 		BigDecimal expected = new BigDecimal("1");
 		BigDecimal actual =  pd.getPossessionBySymbolId("MAIN", "fukumura").getUnit();
 		assertEquals(expected, actual);
