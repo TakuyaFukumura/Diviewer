@@ -82,6 +82,7 @@ public class UserDao extends BasisDao{
 	 * @return UserDTOユーザ情報 失敗時null
 	 */
 	public UserDto getUserById(String user_id) {
+		userDto = null;
 		sql = "select user_id,user_pass,nickname,created_at,update_at from "
 				+ "user_table where user_id = ? ";
 		if (openConnection()) { //DB接続処理
@@ -89,7 +90,7 @@ public class UserDao extends BasisDao{
 				pstmt.setString(1, user_id); //SQLに情報加える
 				executeQuery(); //SQL実行から値取得までの処理
 			} catch (SQLException e) {
-					printSQLException(e);
+				printSQLException(e);
 			}finally{
 				closeConnection(); //DB切断処理
 			}

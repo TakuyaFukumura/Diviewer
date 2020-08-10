@@ -57,7 +57,7 @@ public abstract class BasisDao {
 		flag = false;
 		if (openConnection()) {
 			try {
-				if (executeUpdate() == 1) {
+				if (executeUpdate() != -1) {
 					flag = true;
 				}
 			}finally{
@@ -135,12 +135,16 @@ public abstract class BasisDao {
 	/**
 	 * SQLException発生時にエラーメッセージを表示する
 	 * @param e エラーを説明する文字列
+	 * @return 出力したらtrue 出力なければfalse
 	 */
-	public void printSQLException(SQLException e) {
+	public boolean printSQLException(SQLException e) {
+		flag = false;
 		if(e != null) {
 			System.out.println("ERROR CODE :" + e.getErrorCode());
 			System.out.println(pstmt.toString() + "を実行\n" + e.getMessage() + "が発生。");
+			flag = true;
 		}
+		return flag;
 	}
 
 }

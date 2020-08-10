@@ -47,26 +47,37 @@ public class CsvModel {
 	 * パスはデフォ設定を使用する
 	 * @return 成功true 失敗false
 	 */
-	public boolean outputAllCSV() {
+	public boolean writeAllCSV() {
+		boolean result = true;
 		flag = writeDividendIncomeCSV(null);
-		if(flag) flag = writeTickerCSV(null);
-		if(flag) flag = writeUserCSV(null);
-		if(flag) flag = writePossessionCSV(null);
-		return flag;
+		if(!flag) result = false;
+		flag = writeTickerCSV(null);
+		if(!flag) result = false;
+		flag = writeUserCSV(null);
+		if(!flag) result = false;
+		flag = writePossessionCSV(null);
+		if(!flag) result = false;
+		return result;
 	}
 
 	/**
 	 * 順番を考えつつ（INCOME→PO→TICKER→USER）
-	 * テーブルを初期化してCSV入力していく デフォ設定
+	 * テーブルを初期化してCSV入力していく デフォ設定パス使用
 	 * @return 成功true 失敗false
 	 */
-	public boolean inputAllCSV() {
+	public boolean readeAllCSV() {
+		boolean result = true;
 		flag = initializationTable(); //table初期化
-		if(flag) flag = readeTickerCSV(null); //CSVから読み込む
-		if(flag) flag = readeUserCSV(null);
-		if(flag) flag = readePossessionCSV(null);
-		if(flag) flag = readeIncomeCSV(null);
-		return flag; //TODO 途中で処理止まったらどうする？
+		if(!flag) result = false;
+		flag = readeTickerCSV(null); //CSVから読み込む
+		if(!flag) result = false;
+		flag = readeUserCSV(null);
+		if(!flag) result = false;
+		flag = readePossessionCSV(null);
+		if(!flag) result = false;
+		flag = readeIncomeCSV(null);
+		if(!flag) result = false;
+		return result; //TODO 途中で処理止まったらどうする？
 	}
 	/**
 	 * 順番を考えつつ（INCOME→PO→TICKER→USER）
@@ -74,11 +85,16 @@ public class CsvModel {
 	 * @return 成功true 失敗false
 	 */
 	public boolean initializationTable() {
+		boolean result = true;//一回でもflaseになったら変えないロジック組む
 		flag = dividendIncomeDao.delete();
-		if(flag) flag = possessionDao.delete();
-		if(flag) flag = tickerDao.delete();
-		if(flag) flag = userDao.delete();
-		return flag;
+		if(!flag) result = false;
+		flag = possessionDao.delete();
+		if(!flag) result = false;
+		flag = tickerDao.delete();
+		if(!flag) result = false;
+		flag = userDao.delete();
+		if(!flag) result = false;
+		return result;
 	}
 
 	/**
