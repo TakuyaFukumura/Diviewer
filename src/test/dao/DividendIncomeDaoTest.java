@@ -21,9 +21,9 @@ class DividendIncomeDaoTest extends BaseTest{
 	 */
 	@Test
 	void testDeleteWithSymbol() {
-		boolean flag = did.deleteWithSymbol("fukumura", 11);
+		flag = did.deleteWithSymbol("fukumura", 11);
 		readeTestCSV();
-		assertFalse(flag);
+		assertTrue(flag);
 	}
 
 	/**
