@@ -15,13 +15,15 @@ import org.junit.jupiter.params.provider.CsvSource;
 import dao.DividendIncomeDao;
 import dao.PossessionDao;
 import model.Model;
+import test.BaseTest;
 
 /**
  * @author bx0045
  *
  */
-class ModelTest {
-
+class ModelTest  extends BaseTest{
+	private Model m = new Model();
+	//private boolean flag = false;
 
 	/**
 	 * ティカー情報の削除を行い。
@@ -29,12 +31,11 @@ class ModelTest {
 	 */
 	@Test
 	void testDeleteTicker() {
-		Model m = new Model();
 		//データ追加
-		new PossessionDao().insert("fukumura", 25, new BigDecimal("0"), new BigDecimal("0"));
-		new DividendIncomeDao().insert("fukumura", 25, "2222-12-22", new BigDecimal("0"));
+		new PossessionDao().insert("fukumura", 6, new BigDecimal("0"), new BigDecimal("0"));
+		new DividendIncomeDao().insert("fukumura", 6, "2222-12-22", new BigDecimal("0"));
 		//ティッカーID取得
-		boolean actual =  m.deleteTicker("fukumura", "BND", 25);
+		boolean actual =  m.deleteTicker("fukumura", "SPDY", 6);
 		assertTrue(actual);
 	}
 
@@ -47,8 +48,7 @@ class ModelTest {
 	@Test
 	void testGetSumIncomeList() {
 		//4.26,0.28,1.71,1.48,1.95,0.7,0,0,0,0,0,0
-		Model m = new Model();
-		String[] expected = {"4.26","0.28","1.71","1.48","1.95","0.7","0","0","0","0","0","0"};
+		String[] expected = {"0.51","0.28","1.51","1.22","2.05","1.68","0.97","0","0","0","0","0"};
 		String[] actual =  m.getSumIncomeList("fukumura", 2020);
 		assertArrayEquals(expected, actual);
 	}
@@ -64,7 +64,6 @@ class ModelTest {
 	@CsvSource({"null,2020","fukumura,3020"	})
 	@DisplayName("月毎配当受取額を配列取得するテスト")
 	void testGetSumIncomeListNull(String user_id, int year) {
-		Model m = new Model();
 		String[] expected = {"0","0","0","0","0","0","0","0","0","0","0","0"};
 		String[] actual =  m.getSumIncomeList(null, 2020);
 		assertArrayEquals(expected, actual);
@@ -77,8 +76,7 @@ class ModelTest {
 	 */
 	@Test
 	void testGetCartDataString() {
-		Model m = new Model();
-		String expected = "4.26,0.28,1.71,1.48,1.95,0.7,0,0,0,0,0,0";
+		String expected = "0.51,0.28,1.51,1.22,2.05,1.68,0.97,0,0,0,0,0";
 		String actual =  m.getCartDataString(m.getSumIncomeList("fukumura", 2020));
 		assertEquals(expected, actual);
 	}
@@ -90,7 +88,6 @@ class ModelTest {
 	 */
 	@Test
 	void testGetCartDataStringNull() {
-		Model m = new Model();
 		String expected = "0,0,0,0,0,0,0,0,0,0,0,0";
 		String actual =  m.getCartDataString(null);
 		assertEquals(expected, actual);
@@ -105,8 +102,7 @@ class ModelTest {
 	 */
 	@Test
 	void testLoginCheck() {
-		Model m = new Model();
-		boolean actual = m.loginCheck("fukumura","1114");
+		boolean actual = m.loginCheck("fukumura","takuya045A");
 		assertTrue(actual);
 	}
 
@@ -120,7 +116,6 @@ class ModelTest {
 	 */
 	@Test
 	void testLoginCheckFalse() {
-		Model m = new Model();
 		boolean actual = m.loginCheck("sato","1030");
 		assertFalse(actual);
 	}
@@ -133,9 +128,8 @@ class ModelTest {
 	 */
 	@Test
 	void testDecideUrl() {
-		Model m = new Model();
 		String expected = "top.jsp";
-		String actual =  m.decideUrl("fukumura", "1114");
+		String actual =  m.decideUrl("fukumura", "takuya045A");
 		assertEquals(expected, actual);
 	}
 
@@ -147,10 +141,25 @@ class ModelTest {
 	 */
 	@Test
 	void testDecideUrlFalse() {
-		Model m = new Model();
 		String expected = "index";
 		String actual =  m.decideUrl("tanaka", "9877");
 		assertEquals(expected, actual);
+	}
+
+	/**
+	 * 出力と書き込みのテストをする
+	 */
+	@Test
+	void testReadAndWrite() {
+		//CsvModel cm = new CsvModel();
+		boolean result = true;
+		flag = cm.readeAllCSV();
+		if(!flag) result = false;
+		flag = cm.writeAllCSV();
+		if(!flag) result = false;
+		flag = readeTestCSV();
+		if(!flag) result = false;
+		assertTrue(result);
 	}
 
 }
