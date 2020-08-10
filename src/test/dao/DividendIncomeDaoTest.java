@@ -10,16 +10,19 @@ import org.junit.jupiter.api.Test;
 
 import dao.DividendIncomeDao;
 import dto.DividendIncomeDto;
+import test.BaseTest;
 
-class DividendIncomeDaoTest {
+class DividendIncomeDaoTest extends BaseTest{
+	private DividendIncomeDao did = new DividendIncomeDao();
+	private List<DividendIncomeDto> incomeList = new ArrayList<>();
 
 	/**
 	 *
 	 */
 	@Test
 	void testDeleteWithSymbol() {
-		DividendIncomeDao did = new DividendIncomeDao();
-		boolean flag = did.deleteWithSymbol("fukumura", 99);
+		boolean flag = did.deleteWithSymbol("fukumura", 11);
+		readeTestCSV();
 		assertFalse(flag);
 	}
 
@@ -29,12 +32,9 @@ class DividendIncomeDaoTest {
 	 */
 	@Test
 	void testGetSumIncomeByIdAndMonth() {
-		DividendIncomeDao did = new DividendIncomeDao();
-		BigDecimal expected = new BigDecimal("4.26");
-
+		BigDecimal expected = new BigDecimal("0.51");
 		BigDecimal actual = did.getSumIncomeByIdAndMonth( "fukumura", 2020, 1 );
 		assertEquals(expected, actual);
-		//4.26,0.28,1.71,1.48,1.95,0.7,0,0,0,0,0,0
 	}
 
 	/**
@@ -43,7 +43,6 @@ class DividendIncomeDaoTest {
 	 */
 	@Test
 	void testGetSumIncomeByIdAndMonth3() {
-		DividendIncomeDao did = new DividendIncomeDao();
 		BigDecimal expected = new BigDecimal("0");
 		BigDecimal actual = did.getSumIncomeByIdAndMonth( "fukumura", 2019, 12 );
 		assertEquals(expected, actual);
@@ -71,11 +70,11 @@ class DividendIncomeDaoTest {
 	 */
 	@Test
 	void testInsertAndDelete() {
-		DividendIncomeDao did = new DividendIncomeDao();
 		boolean flag = false;
-		if(did.insert("fukumura", 23, "2222-02-11", new BigDecimal("0.26")) &&
-				did.delete(did.findIncomList("fukumura",23).get(0).getDividend_income_id()))
+		if(did.insert("fukumura", 15, "2222-02-11", new BigDecimal("0.26")) &&
+				did.delete(did.findIncomList("fukumura",15).get(0).getDividend_income_id()))
 				flag = true;
+		readeTestCSV();
 		assertTrue(flag);
 	}
 
@@ -99,9 +98,9 @@ class DividendIncomeDaoTest {
 	 */
 	@Test
 	void testUpdate() {
-		DividendIncomeDao did = new DividendIncomeDao();
-		boolean flag = false;
+		flag = false;
 		flag = did.update(23, new BigDecimal("0.1"), "2020-05-18");
+		readeTestCSV();
 		assertTrue(flag);
 	}
 
@@ -131,9 +130,8 @@ class DividendIncomeDaoTest {
 	 */
 	@Test
 	void testGetDataById() {
-		DividendIncomeDao did = new DividendIncomeDao();
-		String expected = "fukumura";
-		String actual =  did.getDataById(23).getUser_id();
+		int expected = 12;
+		int actual =  did.getDataById(23).getTicker_id();
 		assertEquals(expected, actual);
 	}
 
@@ -158,10 +156,8 @@ class DividendIncomeDaoTest {
 	 */
 	@Test
 	void testFindIncomList() {
-		DividendIncomeDao did = new DividendIncomeDao();
-		List<DividendIncomeDto> incomeList = new ArrayList<>();
-		incomeList = did.findIncomList("fukumura", 28); //MA
-		BigDecimal expected = new BigDecimal("0.19");
+		incomeList = did.findIncomList("fukumura", 14); //MA
+		BigDecimal expected = new BigDecimal("0.35");
 		BigDecimal actual =  incomeList.get(0).getAftertax_income();
 		assertEquals(expected, actual);
 	}
@@ -172,10 +168,9 @@ class DividendIncomeDaoTest {
 	 */
 	@Test
 	void testFindNewIncom() {
-		DividendIncomeDao did = new DividendIncomeDao();
-		List<DividendIncomeDto> list = did.findNewIncom("fukumura");
+		incomeList = did.findNewIncom("fukumura");
 		String expected = "MAIN";
-		String actual =  list.get(0).getTicker_symbol();
+		String actual =  incomeList.get(0).getTicker_symbol();
 		assertEquals(expected, actual);
 	}
 
