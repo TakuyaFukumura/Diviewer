@@ -1,7 +1,7 @@
 /**
  *
  */
-package model;
+package test.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import dao.DividendIncomeDao;
 import dao.PossessionDao;
+import model.Model;
 
 /**
  * @author bx0045

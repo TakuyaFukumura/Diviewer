@@ -1,4 +1,4 @@
-package dao;
+package test.dao;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import dao.DividendIncomeDao;
 import dto.DividendIncomeDto;
 
 class DividendIncomeDaoTest {
@@ -18,7 +19,6 @@ class DividendIncomeDaoTest {
 	@Test
 	void testDeleteWithSymbol() {
 		DividendIncomeDao did = new DividendIncomeDao();
-		did.CLASSNAME_ORACLE_DRIVER = "test";
 		boolean flag = did.deleteWithSymbol("fukumura", 99);
 		assertFalse(flag);
 	}
@@ -49,19 +49,19 @@ class DividendIncomeDaoTest {
 		assertEquals(expected, actual);
 	}
 
-	/**
-	 * ユーザーIDを使用して指定した年月の配当合計額を取得する。
-	 * ユーザID「fukumura」,2020年、1月を引数として実行する際に
-	 * DB接続が失敗した場合0が返ることを確認する
-	 */
-	@Test
-	void testGetSumIncomeByIdAndMonth2() {
-		BigDecimal expected = new BigDecimal("0");
-		DividendIncomeDao did = new DividendIncomeDao();
-		did.CLASSNAME_ORACLE_DRIVER = "test";
-		BigDecimal actual = did.getSumIncomeByIdAndMonth( "fukumura", 2020, 1 );
-		assertEquals(expected, actual);
-	}
+//	/**
+//	 * ユーザーIDを使用して指定した年月の配当合計額を取得する。
+//	 * ユーザID「fukumura」,2020年、1月を引数として実行する際に
+//	 * DB接続が失敗した場合0が返ることを確認する
+//	 */
+//	@Test
+//	void testGetSumIncomeByIdAndMonth2() {
+//		BigDecimal expected = new BigDecimal("0");
+//		DividendIncomeDao did = new DividendIncomeDao();
+//		did.CLASSNAME_ORACLE_DRIVER = "test";
+//		BigDecimal actual = did.getSumIncomeByIdAndMonth( "fukumura", 2020, 1 );
+//		assertEquals(expected, actual);
+//	}
 
 	/**
 	 * 配当情報をテーブルに追加して削除するテスト
@@ -79,19 +79,19 @@ class DividendIncomeDaoTest {
 		assertTrue(flag);
 	}
 
-	/**
-	 * 配当情報をテーブルに追加して削除するテスト
-	 * "fukumura", 23, "2222-02-11", new BigDecimal("0.26")を引数として情報を追加した後、
-	 * ユーザIDとティッカーIDを指定して該当情報を削除する
-	 * 処理に成功した場合はtrueが返る
-	 */
-	@Test
-	void testDeleteFalse() {
-		DividendIncomeDao did = new DividendIncomeDao();
-		did.CLASSNAME_ORACLE_DRIVER = "test";
-		boolean flag = did.delete(99);
-		assertFalse(flag);
-	}
+//	/**
+//	 * 配当情報をテーブルに追加して削除するテスト
+//	 * "fukumura", 23, "2222-02-11", new BigDecimal("0.26")を引数として情報を追加した後、
+//	 * ユーザIDとティッカーIDを指定して該当情報を削除する
+//	 * 処理に成功した場合はtrueが返る
+//	 */
+//	@Test
+//	void testDeleteFalse() {
+//		DividendIncomeDao did = new DividendIncomeDao();
+//		did.CLASSNAME_ORACLE_DRIVER = "test";
+//		boolean flag = did.delete(99);
+//		assertFalse(flag);
+//	}
 
 	/**
 	 * 配当情報の1カラムを更新する
@@ -105,17 +105,17 @@ class DividendIncomeDaoTest {
 		assertTrue(flag);
 	}
 
-	/**
-	 * 配当情報の1カラムを更新する
-	 * DB接続失敗時にfalseが返る
-	 */
-	@Test
-	void testUpdateFalse() {
-		DividendIncomeDao did = new DividendIncomeDao();
-		did.CLASSNAME_ORACLE_DRIVER = "test";
-		boolean flag = did.update(23, new BigDecimal("0.1"), "2020-05-18");
-		assertFalse(flag);
-	}
+//	/**
+//	 * 配当情報の1カラムを更新する
+//	 * DB接続失敗時にfalseが返る
+//	 */
+//	@Test
+//	void testUpdateFalse() {
+//		DividendIncomeDao did = new DividendIncomeDao();
+//		did.CLASSNAME_ORACLE_DRIVER = "test";
+//		boolean flag = did.update(23, new BigDecimal("0.1"), "2020-05-18");
+//		assertFalse(flag);
+//	}
 
 //	@Test
 //	void testDelete() {
@@ -137,18 +137,18 @@ class DividendIncomeDaoTest {
 		assertEquals(expected, actual);
 	}
 
-	/**
-	 * 配当IDを使用してデータを取り出す。
-	 * DB接続失敗時にnullが返ることを確かめる
-	 */
-	@Test
-	void testGetDataById2() {
-		DividendIncomeDto expected = null;
-		DividendIncomeDao did = new DividendIncomeDao();
-		did.CLASSNAME_ORACLE_DRIVER = "test";
-		DividendIncomeDto actual =  did.getDataById(23);
-		assertEquals(expected, actual);
-	}
+//	/**
+//	 * 配当IDを使用してデータを取り出す。
+//	 * DB接続失敗時にnullが返ることを確かめる
+//	 */
+//	@Test
+//	void testGetDataById2() {
+//		DividendIncomeDto expected = null;
+//		DividendIncomeDao did = new DividendIncomeDao();
+//		did.CLASSNAME_ORACLE_DRIVER = "test";
+//		DividendIncomeDto actual =  did.getDataById(23);
+//		assertEquals(expected, actual);
+//	}
 
 
 

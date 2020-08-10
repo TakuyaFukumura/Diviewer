@@ -1,9 +1,10 @@
-package dao;
+package test.dao;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import dao.TickerDao;
 import dto.TickerDto;
 
 class TickerDaoTest {
@@ -22,19 +23,19 @@ class TickerDaoTest {
 			actual = true;
 		assertTrue(actual);
 	}
-	/**
-	 * ティッカー情報の削除を行う
-	 * ドライバ名が不正でDBに接続できない場合
-	 * falseが返ることを確かめる
-	 */
-	@Test
-	void testInsertAndDeleteFalse() {
-		boolean actual = true;
-		TickerDao tickerDao = new TickerDao();
-		tickerDao.CLASSNAME_ORACLE_DRIVER = "test";
-		actual = tickerDao.delete("AAPL");
-		assertFalse(actual);
-	}
+//	/**
+//	 * ティッカー情報の削除を行う
+//	 * ドライバ名が不正でDBに接続できない場合
+//	 * falseが返ることを確かめる
+//	 */
+//	@Test
+//	void testInsertAndDeleteFalse() {
+//		boolean actual = true;
+//		TickerDao tickerDao = new TickerDao();
+//		tickerDao.CLASSNAME_ORACLE_DRIVER = "test";
+//		actual = tickerDao.delete("AAPL");
+//		assertFalse(actual);
+//	}
 
 
 	/**
@@ -59,30 +60,30 @@ class TickerDaoTest {
 		TickerDto actual =  tickerDao.getTickerldBySymbol("ZZZ");
 		assertEquals(expected, actual);
 	}
-	/**
-	 * 存在しないティッカーシンボルZZZを使用して、
-	 * nullが返ることを確認する
-	 */
-	@Test
-	void testGetTickerldBySymbolNull2() {
-		TickerDao tickerDao = new TickerDao();
-		TickerDto expected = null;
-		tickerDao.CLASSNAME_ORACLE_DRIVER = "test";
-		TickerDto actual =  tickerDao.getTickerldBySymbol("ZZZ");
-		assertEquals(expected, actual);
-	}
-	/**
-	 * 引数がnullの時
-	 * nullが返ることを確認する
-	 */
-	@Test
-	void testGetTickerldBySymbolNull3() {
-		TickerDao tickerDao = new TickerDao();
-		TickerDto expected = null;
-		tickerDao.CLASSNAME_ORACLE_DRIVER = "test";
-		TickerDto actual =  tickerDao.getTickerldBySymbol(null);
-		assertEquals(expected, actual);
-	}
+//	/**
+//	 * 存在しないティッカーシンボルZZZを使用して、
+//	 * nullが返ることを確認する
+//	 */
+//	@Test
+//	void testGetTickerldBySymbolNull2() {
+//		TickerDao tickerDao = new TickerDao();
+//		TickerDto expected = null;
+//		tickerDao.CLASSNAME_ORACLE_DRIVER = "test";
+//		TickerDto actual =  tickerDao.getTickerldBySymbol("ZZZ");
+//		assertEquals(expected, actual);
+//	}
+//	/**
+//	 * 引数がnullの時
+//	 * nullが返ることを確認する
+//	 */
+//	@Test
+//	void testGetTickerldBySymbolNull3() {
+//		TickerDao tickerDao = new TickerDao();
+//		TickerDto expected = null;
+//		tickerDao.CLASSNAME_ORACLE_DRIVER = "test";
+//		TickerDto actual =  tickerDao.getTickerldBySymbol(null);
+//		assertEquals(expected, actual);
+//	}
 
 //	/**
 //	 * 不正なクエリが発行された際、

@@ -1,17 +1,15 @@
 /**
  *
  */
-package dao;
+package test.dao;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import dto.PossessionDto;
+import dao.PossessionDao;
 
 /**
  * @author bx0045
@@ -33,62 +31,62 @@ class PossessionDaoTest {
 		assertEquals(expected, actual);
 	}
 
-	/**
-	 * ドライバ名が不正で、
-	 * DB接続できなかった場合、
-	 * Nullが返ることを確認する
-	 */
-	@Test
-	void testSearchPossessionNull() {
-		List<PossessionDto> expected = new ArrayList<>();
-		PossessionDao pd = new PossessionDao();
-		pd.CLASSNAME_ORACLE_DRIVER = "test";
-		List<PossessionDto> actual =  pd.searchPossession("fukumura", "MAIN");
-		assertEquals(expected, actual);
-	}
+//	/**
+//	 * ドライバ名が不正で、
+//	 * DB接続できなかった場合、
+//	 * Nullが返ることを確認する
+//	 */
+//	@Test
+//	void testSearchPossessionNull() {
+//		List<PossessionDto> expected = new ArrayList<>();
+//		PossessionDao pd = new PossessionDao();
+//		pd.CLASSNAME_ORACLE_DRIVER = "test";
+//		List<PossessionDto> actual =  pd.searchPossession("fukumura", "MAIN");
+//		assertEquals(expected, actual);
+//	}
 
-	/**
-	 * 更新処理
-	 * ドライバ名が不正で、
-	 * DB接続できなかった場合、
-	 * falseが返ることを確認する
-	 */
-	@Test
-	void testUpdateFalse() {
-		PossessionDao pd = new PossessionDao();
-		pd.CLASSNAME_ORACLE_DRIVER = "test";
-		boolean actual =  pd.update("fukumura", 23, "VT",
-				new BigDecimal("2"), new BigDecimal("0.3"), "2020-02-01");
-		assertFalse(actual);
-	}
+//	/**
+//	 * 更新処理
+//	 * ドライバ名が不正で、
+//	 * DB接続できなかった場合、
+//	 * falseが返ることを確認する
+//	 */
+//	@Test
+//	void testUpdateFalse() {
+//		PossessionDao pd = new PossessionDao();
+//		pd.CLASSNAME_ORACLE_DRIVER = "test";
+//		boolean actual =  pd.update("fukumura", 23, "VT",
+//				new BigDecimal("2"), new BigDecimal("0.3"), "2020-02-01");
+//		assertFalse(actual);
+//	}
 
-	/**
-	 * 削除処理
-	 * ドライバ名が不正で、
-	 * DB接続できなかった場合、
-	 * falseが返ることを確認する
-	 */
-	@Test
-	void testDeleteFalse() {
-		PossessionDao pd = new PossessionDao();
-		pd.CLASSNAME_ORACLE_DRIVER = "test";
-		boolean actual =  pd.delete("fukumura", "VT");
-		assertFalse(actual);
-	}
+//	/**
+//	 * 削除処理
+//	 * ドライバ名が不正で、
+//	 * DB接続できなかった場合、
+//	 * falseが返ることを確認する
+//	 */
+//	@Test
+//	void testDeleteFalse() {
+//		PossessionDao pd = new PossessionDao();
+//		pd.CLASSNAME_ORACLE_DRIVER = "test";
+//		boolean actual =  pd.delete("fukumura", "VT");
+//		assertFalse(actual);
+//	}
 
-	/**
-	 * 追加処理
-	 * ドライバ名が不正で、
-	 * DB接続できなかった場合、
-	 * falseが返ることを確認する
-	 */
-	@Test
-	void testInsertFalse() {
-		PossessionDao pd = new PossessionDao();
-		pd.CLASSNAME_ORACLE_DRIVER = "test";
-		boolean actual =  pd.insert("fukumura", 23, new BigDecimal("1"), new BigDecimal("0.26"));
-		assertFalse(actual);
-	}
+//	/**
+//	 * 追加処理
+//	 * ドライバ名が不正で、
+//	 * DB接続できなかった場合、
+//	 * falseが返ることを確認する
+//	 */
+//	@Test
+//	void testInsertFalse() {
+//		PossessionDao pd = new PossessionDao();
+//		pd.CLASSNAME_ORACLE_DRIVER = "test";
+//		boolean actual =  pd.insert("fukumura", 23, new BigDecimal("1"), new BigDecimal("0.26"));
+//		assertFalse(actual);
+//	}
 
 
 
@@ -137,17 +135,17 @@ class PossessionDaoTest {
 		BigDecimal actual =  pd.getPossessionBySymbolId("MAIN", "fukumura").getUnit();
 		assertEquals(expected, actual);
 	}
-	/**
-	 * DB接続に失敗した場合、
-	 * nullが返ることを確認する
-	 */
-	@Test
-	void testGetPossessionBySymbolIdNull() {
-		PossessionDto expected = null;
-		PossessionDao pd = new PossessionDao();
-		pd.CLASSNAME_ORACLE_DRIVER = "test";
-		PossessionDto actual =  pd.getPossessionBySymbolId("MAIN", "fukumura");
-		assertEquals(expected, actual);
-	}
+//	/**
+//	 * DB接続に失敗した場合、
+//	 * nullが返ることを確認する
+//	 */
+//	@Test
+//	void testGetPossessionBySymbolIdNull() {
+//		PossessionDto expected = null;
+//		PossessionDao pd = new PossessionDao();
+//		pd.CLASSNAME_ORACLE_DRIVER = "test";
+//		PossessionDto actual =  pd.getPossessionBySymbolId("MAIN", "fukumura");
+//		assertEquals(expected, actual);
+//	}
 
 }

@@ -1,10 +1,12 @@
-package dto;
+package test.dto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Date;
 
 import org.junit.jupiter.api.Test;
+
+import dto.UserDto;
 
 class UserDtoTest {
 
