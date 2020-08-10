@@ -2,12 +2,60 @@ package test.dao;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import dao.TickerDao;
 import dto.TickerDto;
+import model.CsvModel;
 
 class TickerDaoTest {
+	private static CsvModel cm = new CsvModel();
+	private TickerDao tickerDao = new TickerDao();
+	private static boolean flag = false;
+
+	@BeforeAll
+	static void beforeAll() {
+		backupAllCSV();
+		readeTestCSV();
+	}
+
+	/**
+	 * テスト前にバックアップ作成
+	 * @return 成功true 失敗false
+	 */
+	static boolean backupAllCSV() {
+		flag = cm.writeDividendIncomeCSV("test/dividend_income_table_bk.csv");
+		if(flag) flag = cm.writeTickerCSV("test/ticker_table_bk.csv");
+		if(flag) flag = cm.writeUserCSV("test/user_table_bk.csv");
+		if(flag) flag = cm.writePossessionCSV("test/possession_table_bk.csv");
+		return flag;
+	}
+	/**
+	 * テストに使うDBを用意する
+	 * @return 成功true 失敗false
+	 */
+	static boolean readeTestCSV() {
+		flag = cm.initializationTable();
+		if(flag) flag = cm.readeTickerCSV("test/ticker_table.csv");
+		if(flag) flag = cm.readeUserCSV("test/user_table.csv");
+		if(flag) flag = cm.readePossessionCSV("test/possession_table.csv");
+		if(flag) flag = cm.readeIncomeCSV("test/dividend_income_table.csv");
+		return flag;
+	}
+	/**
+	 * バックアップからロードしてDB復元
+	 * @return 成功true 失敗false
+	 */
+	@AfterAll
+	static void readeBackupCSV() {
+		cm.initializationTable();
+		cm.readeTickerCSV("test/ticker_table_bk.csv");
+		cm.readeUserCSV("test/user_table_bk.csv");
+		cm.readePossessionCSV("test/possession_table_bk.csv");
+		cm.readeIncomeCSV("test/dividend_income_table_bk.csv");
+	}
 
 	/**
 	 * ティッカー情報の入力と削除を行う
@@ -17,10 +65,9 @@ class TickerDaoTest {
 	@Test
 	void testInsertAndDelete() {
 		boolean actual = false;
-		TickerDao tickerDao = new TickerDao();
-		if(tickerDao.insert("AAPL") &&
-				tickerDao.delete("AAPL") )
+		if(tickerDao.insert("AAPL") && tickerDao.delete("AAPL") ) {
 			actual = true;
+		}
 		assertTrue(actual);
 	}
 //	/**
@@ -44,9 +91,8 @@ class TickerDaoTest {
 	 */
 	@Test
 	void testGetTickerldBySymbol() {
-		TickerDao tickerDao = new TickerDao();
-		int expected = 23;
-		int actual =  tickerDao.getTickerldBySymbol("VT").getTicker_id();
+		int expected = 5;
+		int actual =  tickerDao.getTickerldBySymbol("PFFD").getTicker_id();
 		assertEquals(expected, actual);
 	}
 	/**
@@ -55,7 +101,6 @@ class TickerDaoTest {
 	 */
 	@Test
 	void testGetTickerldBySymbolNull() {
-		TickerDao tickerDao = new TickerDao();
 		TickerDto expected = null;
 		TickerDto actual =  tickerDao.getTickerldBySymbol("ZZZ");
 		assertEquals(expected, actual);
@@ -104,9 +149,8 @@ class TickerDaoTest {
 	 */
 	@Test
 	void testGetTickerSymbolById() {
-		TickerDao tickerDao = new TickerDao();
-		String expected = "VT";
-		String actual =  tickerDao.getTickerSymbolById(23).getTicker_symbol();
+		String expected = "PFF";
+		String actual =  tickerDao.getTickerSymbolById(9).getTicker_symbol();
 		assertEquals(expected, actual);
 	}
 
@@ -117,7 +161,6 @@ class TickerDaoTest {
 	@Test
 	void testGetTickerSymbolByIdNull() {
 		TickerDto expected = null;
-		TickerDao tickerDao = new TickerDao();
 		TickerDto actual =  tickerDao.getTickerSymbolById(99);
 		assertEquals(expected, actual);
 	}
