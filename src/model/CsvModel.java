@@ -38,48 +38,75 @@ public class CsvModel {
 	private PossessionDao possessionDao = new PossessionDao();
 	private DividendIncomeDao dividendIncomeDao = new DividendIncomeDao();
 	private boolean flag = false;
-	private String filename = "";
+	private String filePath = "";
 	private String line = "";
 	private Pattern p = Pattern.compile(",");
 
 	/**
-	 * 順番を考えつつ（INCOME→PO→TICKER→USER）
-	 * テーブルを初期化してCSV入力していく
+	 * 全テーブルをCSV出力していく
+	 * パスはデフォ設定を使用する
 	 * @return 成功true 失敗false
 	 */
-	public boolean outputAllCSV() {
-		flag = outputDividendIncomeCSV();
-		if(flag) flag = outputTickerCSV();
-		if(flag) flag = outputUserCSV();
-		if(flag) flag = outputPossessionCSV();
-		return flag;
+	public boolean writeAllCSV() {
+		boolean result = true;
+		flag = writeDividendIncomeCSV(null);
+		if(!flag) result = false;
+		flag = writeTickerCSV(null);
+		if(!flag) result = false;
+		flag = writeUserCSV(null);
+		if(!flag) result = false;
+		flag = writePossessionCSV(null);
+		if(!flag) result = false;
+		return result;
 	}
 
 	/**
 	 * 順番を考えつつ（INCOME→PO→TICKER→USER）
-	 * テーブルを初期化してCSV入力していく
+	 * テーブルを初期化してCSV入力していく デフォ設定パス使用
 	 * @return 成功true 失敗false
 	 */
-	public boolean inputAllCSV() {
-		flag = dividendIncomeDao.delete(); //table初期化
-		if(flag) flag = possessionDao.delete();
-		if(flag) flag = tickerDao.delete();
-		if(flag) flag = userDao.delete();
-		if(flag) flag = inputTickerCSV(); //CSVから読み込む
-		if(flag) flag = inputUserCSV();
-		if(flag) flag = inputPossessionCSV();
-		if(flag) flag = inputIncomeCSV();
-		return flag; //TODO 途中で処理止まったらどうする？
+	public boolean readeAllCSV() {
+		boolean result = true;
+		flag = initializationTable(); //table初期化
+		if(!flag) result = false;
+		flag = readeTickerCSV(null); //CSVから読み込む
+		if(!flag) result = false;
+		flag = readeUserCSV(null);
+		if(!flag) result = false;
+		flag = readePossessionCSV(null);
+		if(!flag) result = false;
+		flag = readeIncomeCSV(null);
+		if(!flag) result = false;
+		return result; //TODO 途中で処理止まったらどうする？
+	}
+	/**
+	 * 順番を考えつつ（INCOME→PO→TICKER→USER）
+	 * テーブルを初期化する
+	 * @return 成功true 失敗false
+	 */
+	public boolean initializationTable() {
+		boolean result = true;//一回でもflaseになったら変えないロジック組む
+		flag = dividendIncomeDao.delete();
+		if(!flag) result = false;
+		flag = possessionDao.delete();
+		if(!flag) result = false;
+		flag = tickerDao.delete();
+		if(!flag) result = false;
+		flag = userDao.delete();
+		if(!flag) result = false;
+		return result;
 	}
 
 	/**
 	 * user_table情報をCSV入力する
+	 * CSVファイル名はデフォルト値を設定したうえで変数化してある
+	 * @param csvFileName 読み込むファイル名 default Null
 	 * @return 成功true 失敗false
 	 */
-	public boolean inputUserCSV() {
+	public boolean readeUserCSV(String csvFileName) {
 		flag = false;
-		filename = "WebContent/csv/user_table.csv";
-		try (var reader = new BufferedReader(new FileReader(new File(filename)))) {
+		setFilePath("user_table.csv", csvFileName);
+		try (var reader = new BufferedReader(new FileReader(new File(filePath)))) {
 			line = reader.readLine();
 			while((line = reader.readLine()) != null) {
 			    String[] result = p.split(line);//2行目からコンマで分解 for (int i=0; i<result.length; i++) System.out.print("[" + result[i] + "]");System.out.println("");
@@ -97,12 +124,14 @@ public class CsvModel {
 
 	/**
 	 * ticker_table情報をCSV入力する
+	 * CSVファイル名はデフォルト値を設定したうえで変数化してある
+	 * @param csvFileName 読み込むファイル名 default Null
 	 * @return 成功true 失敗false
 	 */
-	public boolean inputTickerCSV() {
+	public boolean readeTickerCSV(String csvFileName) {
 		flag = false;
-		filename = "WebContent/csv/ticker_table.csv";
-		try (var reader = new BufferedReader(new FileReader(new File(filename)))) {
+		setFilePath("ticker_table.csv", csvFileName);
+		try (var reader = new BufferedReader(new FileReader(new File(filePath)))) {
 			line = reader.readLine();
 			while((line = reader.readLine()) != null) {
 			    String[] result = p.split(line);//2行目からコンマで分解 for (int i=0; i<result.length; i++) System.out.print("[" + result[i] + "]");System.out.println("");
@@ -119,12 +148,14 @@ public class CsvModel {
 
 	/**
 	 * possession_table情報をCSV入力する
+	 * CSVファイル名はデフォルト値を設定したうえで変数化してある
+	 * @param csvFileName 読み込むファイル名 default Null
 	 * @return 成功true 失敗false
 	 */
-	public boolean inputPossessionCSV() {
+	public boolean readePossessionCSV(String csvFileName) {
 		flag = false;
-		filename = "WebContent/csv/possession_table.csv";
-		try (var reader = new BufferedReader(new FileReader(new File(filename)))) {
+		setFilePath("possession_table.csv", csvFileName);
+		try (var reader = new BufferedReader(new FileReader(new File(filePath)))) {
 			line = reader.readLine();
 			while((line = reader.readLine()) != null) {
 			    String[] result = p.split(line);//2行目からコンマで分解 for (int i=0; i<result.length; i++) System.out.print("[" + result[i] + "]");System.out.println("");
@@ -143,12 +174,14 @@ public class CsvModel {
 
 	/**
 	 * dividend_income_table情報をCSV入力する
+	 * CSVファイル名はデフォルト値を設定したうえで変数化してある
+	 * @param csvFileName 読み込むファイル名 default Null
 	 * @return 成功true 失敗false
 	 */
-	public boolean inputIncomeCSV() {
+	public boolean readeIncomeCSV(String csvFileName) {
 		flag = false;
-		filename = "WebContent/csv/dividend_income_table.csv";
-		try (var reader = new BufferedReader(new FileReader(new File(filename)))) {
+		setFilePath("dividend_income_table.csv", csvFileName);
+		try (var reader = new BufferedReader(new FileReader(new File(filePath)))) {
 			line = reader.readLine();
 			while((line = reader.readLine()) != null) {
 			    String[] result = p.split(line);//2行目からコンマで分解 for (int i=0; i<result.length; i++) System.out.print("[" + result[i] + "]");System.out.println("");
@@ -167,13 +200,16 @@ public class CsvModel {
 
 	/**
 	 * dividend_income_table情報をCSV出力する
+	 * CSVファイル名はデフォルト値を設定したうえで変数化してある
+	 * @param csvFileName 読み込むファイル名 default Null
 	 * @return 成功true 失敗false
 	 */
-	public boolean outputDividendIncomeCSV() {
+	public boolean writeDividendIncomeCSV(String csvFileName) {
 		flag = false;
+		setFilePath("dividend_income_table.csv", csvFileName);
 		dividendIncomeList = dividendIncomeDao.getDividendIncomeAll();
 		try {
-            FileWriter fw = new FileWriter("WebContent/csv/dividend_income_table.csv");
+            FileWriter fw = new FileWriter(filePath);
             fw.write("dividend_income_id,user_id,ticker_id,receipt_date,aftertax_income,created_at,update_at");
             for (DividendIncomeDto tmp: dividendIncomeList) {
             	String dividend_income_id = String.valueOf(tmp.getDividend_income_id());
@@ -205,13 +241,16 @@ public class CsvModel {
 	}
 	/**
 	 * possession_table情報をCSV出力する
+	 * CSVファイル名はデフォルト値を設定したうえで変数化してある
+	 * @param csvFileName 読み込むファイル名 default Null
 	 * @return 成功true 失敗false
 	 */
-	public boolean outputPossessionCSV() {
+	public boolean writePossessionCSV(String csvFileName) {
 		flag = false;
+		setFilePath("possession_table.csv", csvFileName);
 		possessionList = possessionDao.getPossessionAll();
 		try {
-            FileWriter fw = new FileWriter("WebContent/csv/possession_table.csv");
+            FileWriter fw = new FileWriter(filePath);
             fw.write("user_id,ticker_id,unit,average_unit_cost,created_at,update_at");
             for (PossessionDto tmp: possessionList) {
             	String ticker_id = String.valueOf(tmp.getTicker_id());
@@ -239,13 +278,16 @@ public class CsvModel {
 	}
 	/**
 	 * user_table情報をCSV出力する
+	 * CSVファイル名はデフォルト値を設定したうえで変数化してある
+	 * @param csvFileName 読み込むファイル名 default Null
 	 * @return 成功true 失敗false
 	 */
-	public boolean outputUserCSV() {
+	public boolean writeUserCSV(String csvFileName) {
 		flag = false;
+		setFilePath("user_table.csv", csvFileName);
 		userList = userDao.getUserAll();
 		try {
-            FileWriter fw = new FileWriter("WebContent/csv/user_table.csv");
+            FileWriter fw = new FileWriter(filePath);
             fw.write("user_id,user_pass,nickname,created_at,update_at");
             for (UserDto tmp: userList) {
             	String created_at = ConvDateToStr(tmp.getCreated_at());
@@ -270,13 +312,16 @@ public class CsvModel {
 	}
 	/**
 	 * ticker_table情報をCSV出力する
+	 * CSVファイル名はデフォルト値を設定したうえで変数化してある
+	 * @param csvFileName 読み込むファイル名 default Null
 	 * @return 成功true 失敗false
 	 */
-	public boolean outputTickerCSV() {
+	public boolean writeTickerCSV(String csvFileName) {
 		flag = false;
+		setFilePath("ticker_table.csv", csvFileName);
 		tickerList = tickerDao.getTickerAll();
 		try {
-            FileWriter fw = new FileWriter("WebContent/csv/ticker_table.csv");
+            FileWriter fw = new FileWriter(filePath);
             fw.write("ticker_id,ticker_symbol");
             for (TickerDto tmp: tickerList) {
             	String ticker_id = String.valueOf(tmp.getTicker_id());
@@ -291,6 +336,11 @@ public class CsvModel {
             ex.printStackTrace();
         }
 		return flag;
+	}
+
+	public void setFilePath(String fileName, String csvFileName) {
+		if(csvFileName != null) fileName = csvFileName;
+		filePath = "WebContent/csv/" + fileName;
 	}
 
 	public String ConvDateToStr(Date date) {

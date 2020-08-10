@@ -127,7 +127,7 @@ public class TickerDao extends BasisDao{
 	 * @return 成功:情報格納したDTO 失敗時null
 	 */
 	public TickerDto getTickerldBySymbol(String ticker_symbol) {
-		tickerList = new ArrayList<>();
+		tickerDto = null;
 		sql = "SELECT ticker_id,ticker_symbol FROM "
 				+ "ticker_table WHERE ticker_symbol = ?" ;
 		if (openConnection()) {
@@ -149,7 +149,7 @@ public class TickerDao extends BasisDao{
 	 * @return ティッカーID 失敗時null
 	 */
 	public TickerDto getTickerSymbolById(int ticker_id) {
-		tickerList = new ArrayList<>();
+		tickerDto = null;
 		sql = "SELECT ticker_id,ticker_symbol FROM "
 				+ "ticker_table WHERE ticker_id = ? ";
 		if (openConnection()) {

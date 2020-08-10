@@ -1,11 +1,15 @@
 /**
  *
  */
-package dao;
+package test;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+import dao.DividendIncomeDao;
+import dao.PossessionDao;
+import dao.TickerDao;
+import dao.UserDao;
 import dto.DividendIncomeDto;
 import dto.PossessionDto;
 import dto.TickerDto;
@@ -57,11 +61,13 @@ public class Test {
 //		System.out.println(new CsvModel().inputIncomeCSV());
 //		System.out.println(new CsvModel().inputPossessionCSV());
 //		System.out.println(new CsvModel().inputTickerCSV());
-		System.out.println(new CsvModel().inputUserCSV());
-//		new DividendIncomeDao().delete(); //DB初期化
-//		new PossessionDao().delete();
-//		new TickerDao().delete();
-//		new UserDao().delete();
+//		System.out.println(new CsvModel().readeUserCSV(null));
+//		System.out.println( new DividendIncomeDao().delete() );
+//		System.out.println( new PossessionDao().delete() );
+//		System.out.println( new TickerDao().delete() );
+//		System.out.println( new UserDao().delete() );
+		System.out.println(new CsvModel().readeAllCSV());
+//		System.out.println(new CsvModel().initializationTable());
 	}
 
 	/**

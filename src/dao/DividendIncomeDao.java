@@ -218,9 +218,6 @@ public class DividendIncomeDao extends BasisDao{
 		return deleteAll();
 	}
 
-
-
-
 	/**
 	 * 配当情報の取得
 	 * @param dividend_income_id 配当ID
